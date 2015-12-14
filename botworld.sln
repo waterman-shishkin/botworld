@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "botworld.bl", "botworld.bl\botworld.bl.csproj", "{55277194-2D70-4C5C-AF91-B1C7A68CF5CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{5A90D66F-7D16-458D-A288-467F3B0918F1}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "botworld.bl.tests", "botworld.bl.tests\botworld.bl.tests.csproj", "{354B0476-0CDB-4369-911E-30F089FD73AF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{55277194-2D70-4C5C-AF91-B1C7A68CF5CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55277194-2D70-4C5C-AF91-B1C7A68CF5CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55277194-2D70-4C5C-AF91-B1C7A68CF5CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55277194-2D70-4C5C-AF91-B1C7A68CF5CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{354B0476-0CDB-4369-911E-30F089FD73AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{354B0476-0CDB-4369-911E-30F089FD73AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{354B0476-0CDB-4369-911E-30F089FD73AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{354B0476-0CDB-4369-911E-30F089FD73AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
