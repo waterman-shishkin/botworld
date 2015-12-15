@@ -1,6 +1,4 @@
 ﻿using NUnit.Framework;
-using botworld.bl;
-using System;
 
 namespace botworld.bl.tests
 {
