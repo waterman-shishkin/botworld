@@ -1,13 +1,13 @@
 ﻿namespace botworld.bl
 {
-    public enum BotAction
-    {
-        None,
-        TurnLeft,
-        TurnRight,
-        Step,
-        Explore,
-        Collect,
-        Act
-    }
+	public enum BotAction
+	{
+		None,
+		TurnLeft,
+		TurnRight,
+		Step,
+		Explore,
+		Collect,
+		Act
+	}
 }
