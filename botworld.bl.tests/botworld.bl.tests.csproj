@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GemTests.cs" />
     <Compile Include="BotTests.cs" />
     <Compile Include="PredefinedKeysSequenceSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

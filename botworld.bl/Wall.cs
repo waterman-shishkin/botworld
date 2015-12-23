@@ -1,13 +1,21 @@
 namespace botworld.bl
 {
-	class Wall : IEntity
+	public class Wall : IEntity
 	{
-		public Wall(decimal hp, decimal attackStrength, decimal defenceStrength)
+		public Wall(float hp, float attackStrength, float defenceStrength, Location location)
 		{
 			HP = hp;
 			AttackStrength = attackStrength;
 			DefenceStrength = defenceStrength;
+			Location = location;
 		}
+
+		public EntityType Type
+		{
+			get { return EntityType.Wall; }
+		}
+
+		public Location Location { get; private set; }
 
 		public bool CanShareCell
 		{
@@ -24,13 +32,13 @@ namespace botworld.bl
 			get { return HP <= 0; }
 		}
 
-		public decimal HP { get; private set; }
+		public float HP { get; private set; }
 
-		public decimal AttackStrength { get; private set; }
+		public float AttackStrength { get; private set; }
 
-		public decimal DefenceStrength { get; private set; }
+		public float DefenceStrength { get; private set; }
 
-		public bool ImpactDamage(decimal damage)
+		public bool ImpactDamage(float damage)
 		{
 			HP -= damage;
 			if (HP < 0)

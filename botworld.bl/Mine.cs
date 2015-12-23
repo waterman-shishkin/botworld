@@ -1,12 +1,20 @@
 namespace botworld.bl
 {
-	class Bomb : IEntity
+	public class Mine : IEntity
 	{
-		public Bomb(decimal attackStrength)
+		public Mine(float attackStrength, Location location)
 		{
 			HP = 1;
 			AttackStrength = attackStrength;
+			Location = location;
 		}
+
+		public EntityType Type
+		{
+			get { return EntityType.Mine; }
+		}
+
+		public Location Location { get; private set; }
 
 		public bool CanShareCell
 		{
@@ -23,13 +31,13 @@ namespace botworld.bl
 			get { return HP <= 0; }
 		}
 
-		public decimal HP { get; private set; }
+		public float HP { get; private set; }
 
-		public decimal AttackStrength { get; private set; }
+		public float AttackStrength { get; private set; }
 
-		public decimal DefenceStrength { get { return 0; } }
+		public float DefenceStrength { get { return 0; } }
 
-		public bool ImpactDamage(decimal damage)
+		public bool ImpactDamage(float damage)
 		{
 			if (damage > 0)
 				HP = 0;
