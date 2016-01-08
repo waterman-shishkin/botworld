@@ -77,7 +77,7 @@ namespace botworld.bl.tests
 		{
 			var gem = new Gem(100, new Location(2, 4));
 
-			gem.ImpactDamage(0.0001f);
+			gem.ImpactDamage(0.0001);
 
 			Assert.That(gem.IsDead, Is.True);
 		}

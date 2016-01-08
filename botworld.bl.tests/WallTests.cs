@@ -78,7 +78,7 @@ namespace botworld.bl.tests
 		{
 			var wall = new Wall(100, 10, 10, new Location(2, 4));
 
-			wall.ImpactDamage(25f);
+			wall.ImpactDamage(25);
 
 			Assert.That(wall.HP, Is.EqualTo(75));
 			Assert.That(wall.IsDead, Is.False);
@@ -89,7 +89,7 @@ namespace botworld.bl.tests
 		{
 			var wall = new Wall(100, 10, 10, new Location(2, 4));
 
-			wall.ImpactDamage(250f);
+			wall.ImpactDamage(250);
 
 			Assert.That(wall.HP, Is.EqualTo(0));
 			Assert.That(wall.IsDead, Is.True);

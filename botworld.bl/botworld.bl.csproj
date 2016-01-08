@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Direction.cs" />
     <Compile Include="BotInfo.cs" />
     <Compile Include="HumanControlBotIntelligence.cs" />
     <Compile Include="IBotIntelligence.cs" />

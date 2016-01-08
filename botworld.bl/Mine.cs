@@ -2,7 +2,7 @@ namespace botworld.bl
 {
 	public class Mine : IEntity
 	{
-		public Mine(float attackStrength, Location location)
+		public Mine(double attackStrength, Location location)
 		{
 			HP = 1;
 			AttackStrength = attackStrength;
@@ -31,13 +31,13 @@ namespace botworld.bl
 			get { return HP <= 0; }
 		}
 
-		public float HP { get; private set; }
+		public double HP { get; private set; }
 
-		public float AttackStrength { get; private set; }
+		public double AttackStrength { get; private set; }
 
-		public float DefenceStrength { get { return 0; } }
+		public double DefenceStrength { get { return 0; } }
 
-		public bool ImpactDamage(float damage)
+		public bool ImpactDamage(double damage)
 		{
 			if (damage > 0)
 				HP = 0;

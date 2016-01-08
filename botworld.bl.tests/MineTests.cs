@@ -69,7 +69,7 @@ namespace botworld.bl.tests
 		{
 			var mine = new Mine(100, new Location(2, 4));
 
-			mine.ImpactDamage(0.0001f);
+			mine.ImpactDamage(0.0001);
 
 			Assert.That(mine.IsDead, Is.True);
 		}

@@ -10,7 +10,7 @@ namespace botworld.bl.tests
 		[Test]
 		public void Name_Returns_NameSetByConstructor()
 		{
-			var bot = new Bot("Angry bot", null);
+			var bot = new Bot("Angry bot", 100, new Location(2, 4), Direction.North, null);
 
 			Assert.That(bot.Name, Is.EqualTo("Angry bot"));
 		}
@@ -20,7 +20,7 @@ namespace botworld.bl.tests
 		{
 			var botIntelligence = Substitute.For<IBotIntelligence>();
 			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>()).Returns(BotAction.TurnLeft, BotAction.Step, BotAction.TurnRight, BotAction.Act, BotAction.Explore, BotAction.Collect, BotAction.None);
-			var bot = new Bot("Angry bot", botIntelligence);
+			var bot = new Bot("Angry bot", 100, new Location(2, 4), Direction.North, botIntelligence);
 
 			var expectedActions = new[] { BotAction.TurnLeft, BotAction.Step, BotAction.TurnRight, BotAction.Act, BotAction.Explore, BotAction.Collect, BotAction.None };
 			var actions = new List<BotAction>();

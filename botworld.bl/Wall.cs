@@ -2,7 +2,7 @@ namespace botworld.bl
 {
 	public class Wall : IEntity
 	{
-		public Wall(float hp, float attackStrength, float defenceStrength, Location location)
+		public Wall(double hp, double attackStrength, double defenceStrength, Location location)
 		{
 			HP = hp;
 			AttackStrength = attackStrength;
@@ -32,13 +32,13 @@ namespace botworld.bl
 			get { return HP <= 0; }
 		}
 
-		public float HP { get; private set; }
+		public double HP { get; private set; }
 
-		public float AttackStrength { get; private set; }
+		public double AttackStrength { get; private set; }
 
-		public float DefenceStrength { get; private set; }
+		public double DefenceStrength { get; private set; }
 
-		public bool ImpactDamage(float damage)
+		public bool ImpactDamage(double damage)
 		{
 			HP -= damage;
 			if (HP < 0)

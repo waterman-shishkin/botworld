@@ -2,14 +2,17 @@
 {
 	public class BotInfo
 	{
-		public BotInfo(float hp, Location location)
+		public BotInfo(double hp, Location location, Direction direction)
 		{
 			HP = hp;
 			Location = location;
+			Direction = direction;
 		}
 
-		public float HP { get; private set; }
+		public double HP { get; private set; }
 
 		public Location Location { get; private set; }
+
+		public Direction Direction { get; private set; }
 	}
 }

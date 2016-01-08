@@ -31,15 +31,15 @@ namespace botworld.bl
 			get { return HP <= 0; }
 		}
 
-		public float HP { get; private set; }
+		public double HP { get; private set; }
 
-		public float AttackStrength { get { return 0; } }
+		public double AttackStrength { get { return 0; } }
 
-		public float DefenceStrength { get { return 0; } }
+		public double DefenceStrength { get { return 0; } }
 
 		public int Points { get; private set; }
 
-		public bool ImpactDamage(float damage)
+		public bool ImpactDamage(double damage)
 		{
 			if (damage > 0)
 				HP = 0;

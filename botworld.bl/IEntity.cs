@@ -7,10 +7,10 @@
 		bool CanShareCell { get; }
 		bool IsCollectable { get; }
 		bool IsDead { get; }
-		float HP { get; }
-		float AttackStrength { get; }
-		float DefenceStrength { get; }
-		bool ImpactDamage(float damage);
+		double HP { get; }
+		double AttackStrength { get; }
+		double DefenceStrength { get; }
+		bool ImpactDamage(double damage);
 		InvasionResponseAction ChooseInvasionResponseAction(IEntity guest);
 		AttackResponseAction ChooseAttackResponseAction(IEntity guest);
 	}

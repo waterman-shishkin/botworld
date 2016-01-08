@@ -4,9 +4,9 @@ namespace botworld.bl
 {
 	public class ConsoleKeysSequenceSource : IKeysSequenceSource
 	{
-		public ConsoleKey GetNextKey()
+		public ConsoleKeyInfo GetNextKey()
 		{
-			return Console.ReadKey().Key;
+			return Console.ReadKey();
 		}
 	}
 }
