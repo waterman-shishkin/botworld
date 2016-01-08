@@ -59,7 +59,7 @@ namespace botworld.bl.tests
 		{
 			var gem = new Gem(100, new Location(2, 4));
 
-			Assert.That(gem.AttackStrength, Is.EqualTo(0));
+			Assert.That(gem.DefenceStrength, Is.EqualTo(0));
 		}
 
 		[Test]

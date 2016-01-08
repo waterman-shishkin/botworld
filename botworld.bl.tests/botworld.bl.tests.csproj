@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WallTests.cs" />
+    <Compile Include="MineTests.cs" />
     <Compile Include="GemTests.cs" />
     <Compile Include="BotTests.cs" />
     <Compile Include="PredefinedKeysSequenceSource.cs" />
