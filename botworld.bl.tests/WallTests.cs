@@ -63,6 +63,23 @@ namespace botworld.bl.tests
 		}
 
 		[Test]
+		public void PrepareEntityInfo_Returns_ProperInfo()
+		{
+			var wall = new Wall(100, 10, 10, new Location(2, 4));
+
+			var entityInfo = wall.PrepareEntityInfo();
+
+			Assert.That(entityInfo.Type, Is.EqualTo(EntityType.Wall));
+			Assert.That(entityInfo.Location.X, Is.EqualTo(2));
+			Assert.That(entityInfo.Location.Y, Is.EqualTo(4));
+			Assert.That(entityInfo.CanShareCell, Is.False);
+			Assert.That(entityInfo.IsCollectable, Is.False);
+			Assert.That(entityInfo.HP, Is.EqualTo(100));
+			Assert.That(entityInfo.AttackStrength, Is.EqualTo(10));
+			Assert.That(entityInfo.DefenceStrength, Is.EqualTo(10));
+		}
+
+		[Test]
 		public void ImpactDamage_ForZeroDamage_ResultsNotIsDeadAndNotChangedHP()
 		{
 			var wall = new Wall(100, 10, 10, new Location(2, 4));

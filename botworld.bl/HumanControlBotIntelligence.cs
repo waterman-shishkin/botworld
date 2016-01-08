@@ -45,6 +45,16 @@ namespace botworld.bl
 			return actionsQueue.Dequeue();
 		}
 
+		public InvasionResponseAction ChooseInvasionResponseAction(BotInfo botInfo, EntityInfo guestInfo)
+		{
+			return InvasionResponseAction.None;
+		}
+
+		public AttackResponseAction ChooseAttackResponseAction(BotInfo botInfo, EntityInfo guestInfo)
+		{
+			return AttackResponseAction.None;
+		}
+
 		private void EnqueueTurnCommands(Direction direction, ConsoleKeyInfo keyPressed)
 		{
 			var desiredDirection = keyToDirection[keyPressed.Key];

@@ -9,6 +9,28 @@ namespace botworld.bl.tests
 	public class HumanControlBotIntelligenceTests
 	{
 		[Test]
+		public void ChooseInvasionResponseAction_Always_ReturnnsNone()
+		{
+			var keysSequence = Substitute.For<IKeysSequenceSource>();
+			var botIntelligence = new HumanControlBotIntelligence(keysSequence);
+
+			var action = botIntelligence.ChooseInvasionResponseAction(null, null);
+
+			Assert.That(action, Is.EqualTo(InvasionResponseAction.None));
+		}
+
+		[Test]
+		public void ChooseAttackResponseAction_Always_ReturnnsNone()
+		{
+			var keysSequence = Substitute.For<IKeysSequenceSource>();
+			var botIntelligence = new HumanControlBotIntelligence(keysSequence);
+
+			var action = botIntelligence.ChooseAttackResponseAction(null, null);
+
+			Assert.That(action, Is.EqualTo(AttackResponseAction.None));
+		}
+
+		[Test]
 		public void ChooseNextAction_ForNorthStartDirectionAndCertainKeysSequence_ReturnsCorrespondingActions()
 		{
 			var keysSequence = Substitute.For<IKeysSequenceSource>();
@@ -39,7 +61,7 @@ namespace botworld.bl.tests
 			};
 			var actions = new List<BotAction>();
 			for (var i = 0; i < expectedActions.Length; i++)
-				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, new Location(1, 1), Direction.North)));
+				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, 5, 3, new Location(1, 1), Direction.North)));
 
 			Assert.That(actions.ToArray(), Is.EqualTo(expectedActions));
 		}
@@ -76,7 +98,7 @@ namespace botworld.bl.tests
 			};
 			var actions = new List<BotAction>();
 			for (var i = 0; i < expectedActions.Length; i++)
-				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, new Location(1, 1), Direction.East)));
+				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, 5, 3, new Location(1, 1), Direction.East)));
 
 			Assert.That(actions.ToArray(), Is.EqualTo(expectedActions));
 		}
@@ -114,7 +136,7 @@ namespace botworld.bl.tests
 			};
 			var actions = new List<BotAction>();
 			for (var i = 0; i < expectedActions.Length; i++)
-				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, new Location(1, 1), Direction.South)));
+				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, 5, 3, new Location(1, 1), Direction.South)));
 
 			Assert.That(actions.ToArray(), Is.EqualTo(expectedActions));
 		}
@@ -151,7 +173,7 @@ namespace botworld.bl.tests
 			};
 			var actions = new List<BotAction>();
 			for (var i = 0; i < expectedActions.Length; i++)
-				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, new Location(1, 1), Direction.West)));
+				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, 5, 3, new Location(1, 1), Direction.West)));
 
 			Assert.That(actions.ToArray(), Is.EqualTo(expectedActions));
 		}

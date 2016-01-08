@@ -1,17 +1,16 @@
 ﻿namespace botworld.bl
 {
-	public class BotInfo
+	public class BotInfo : EntityInfo
 	{
-		public BotInfo(double hp, Location location, Direction direction)
+		public BotInfo(double hp, double attackStrength, double defenceStrength, Location location, Direction direction)
+			: base(EntityType.Bot, hp, attackStrength, defenceStrength, location, true, false)
 		{
-			HP = hp;
-			Location = location;
 			Direction = direction;
 		}
 
-		public double HP { get; private set; }
-
-		public Location Location { get; private set; }
+		public BotInfo(EntityInfo entityInfo, Direction direction)
+			: this(entityInfo.HP, entityInfo.AttackStrength, entityInfo.DefenceStrength, entityInfo.Location, direction)
+		{}
 
 		public Direction Direction { get; private set; }
 	}

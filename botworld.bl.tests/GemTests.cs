@@ -63,6 +63,23 @@ namespace botworld.bl.tests
 		}
 
 		[Test]
+		public void PrepareEntityInfo_Returns_ProperInfo()
+		{
+			var gem = new Gem(100, new Location(2, 4));
+
+			var entityInfo = gem.PrepareEntityInfo();
+
+			Assert.That(entityInfo.Type, Is.EqualTo(EntityType.Gem));
+			Assert.That(entityInfo.Location.X, Is.EqualTo(2));
+			Assert.That(entityInfo.Location.Y, Is.EqualTo(4));
+			Assert.That(entityInfo.CanShareCell, Is.True);
+			Assert.That(entityInfo.IsCollectable, Is.True);
+			Assert.That(entityInfo.HP, Is.EqualTo(1));
+			Assert.That(entityInfo.AttackStrength, Is.EqualTo(0));
+			Assert.That(entityInfo.DefenceStrength, Is.EqualTo(0));
+		}
+
+		[Test]
 		public void ImpactDamage_ForZeroDamage_ResultsNotIsDead()
 		{
 			var gem = new Gem(100, new Location(2, 4));

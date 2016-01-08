@@ -55,6 +55,23 @@ namespace botworld.bl.tests
 		}
 
 		[Test]
+		public void PrepareEntityInfo_Returns_ProperInfo()
+		{
+			var mine = new Mine(100, new Location(2, 4));
+
+			var entityInfo = mine.PrepareEntityInfo();
+
+			Assert.That(entityInfo.Type, Is.EqualTo(EntityType.Mine));
+			Assert.That(entityInfo.Location.X, Is.EqualTo(2));
+			Assert.That(entityInfo.Location.Y, Is.EqualTo(4));
+			Assert.That(entityInfo.CanShareCell, Is.True);
+			Assert.That(entityInfo.IsCollectable, Is.False);
+			Assert.That(entityInfo.HP, Is.EqualTo(1));
+			Assert.That(entityInfo.AttackStrength, Is.EqualTo(100));
+			Assert.That(entityInfo.DefenceStrength, Is.EqualTo(0));
+		}
+
+		[Test]
 		public void ImpactDamage_ForZeroDamage_ResultsNotIsDead()
 		{
 			var mine = new Mine(100, new Location(2, 4));

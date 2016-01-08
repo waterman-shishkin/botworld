@@ -53,5 +53,10 @@ namespace botworld.bl
 		{
 			return AttackResponseAction.None;
 		}
+
+		public EntityInfo PrepareEntityInfo()
+		{
+			return new EntityInfo(Type, HP, AttackStrength, DefenceStrength, Location, CanShareCell, IsCollectable);
+		}
 	}
 }
