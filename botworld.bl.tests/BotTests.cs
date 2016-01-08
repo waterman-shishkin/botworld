@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace botworld.bl.tests
@@ -16,16 +16,16 @@ namespace botworld.bl.tests
 		}
 
 		[Test]
-		public void ChooseNextAction_ForKeysSequence_ReturnsCorrespondingActions()
+		public void ChooseNextAction_Always_ReturnsActionsReturnedByBotIntelligence()
 		{
-			var keysSequence = new[] { ConsoleKey.LeftArrow, ConsoleKey.UpArrow, ConsoleKey.RightArrow, ConsoleKey.Spacebar, ConsoleKey.Enter, ConsoleKey.NumPad0, ConsoleKey.LeftWindows };
-			var bot = new Bot("Angry bot", new PredefinedKeysSequenceSource(keysSequence));
-
-			var actions = new List<BotAction>();
-			for (var i = 0; i < keysSequence.Length; i++)
-				actions.Add(bot.ChooseNextAction());
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>()).Returns(BotAction.TurnLeft, BotAction.Step, BotAction.TurnRight, BotAction.Act, BotAction.Explore, BotAction.Collect, BotAction.None);
+			var bot = new Bot("Angry bot", botIntelligence);
 
 			var expectedActions = new[] { BotAction.TurnLeft, BotAction.Step, BotAction.TurnRight, BotAction.Act, BotAction.Explore, BotAction.Collect, BotAction.None };
+			var actions = new List<BotAction>();
+			for (var i = 0; i < expectedActions.Length; i++)
+				actions.Add(bot.ChooseNextAction());
 
 			Assert.That(actions.ToArray(), Is.EqualTo(expectedActions));
 		}

@@ -7,7 +7,8 @@ namespace botworld.console
 	{
 		private static void Main(string[] args)
 		{
-			var bot = new Bot("Console Bot", new ConsoleKeysSequenceSource());
+			var botIntelligence = new HumanControlBotIntelligence(new ConsoleKeysSequenceSource());
+			var bot = new Bot("Console Bot", botIntelligence);
 			Console.WriteLine("Hello from bot \"{0}\"!", bot.Name);
 			BotAction nextAction;
 			do
