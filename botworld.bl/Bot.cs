@@ -1,6 +1,6 @@
 ﻿namespace botworld.bl
 {
-	public class Bot : IEntity
+	public class Bot : IBot
 	{
 		private readonly IBotIntelligence botIntelligence;
 
