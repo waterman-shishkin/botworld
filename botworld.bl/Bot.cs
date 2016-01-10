@@ -30,30 +30,23 @@
 
 		public bool ImpactDamage(double damage)
 		{
+			var previousHP = HP;
 			HP -= damage;
 			if (HP < 0)
 				HP = 0;
+			if (HP != previousHP)
+				botIntelligence.OnDamage(previousHP, HP);
 			return IsDead;
 		}
 
 		public InvasionResponseAction ChooseInvasionResponseAction(IEntity guest)
 		{
-			return botIntelligence.ChooseInvasionResponseAction(PrepareBotInfo(), guest.PrepareEntityInfo());
-		}
-
-		public BotInfo PrepareBotInfo()
-		{
-			return new BotInfo(PrepareEntityInfo(), Direction);
+			return botIntelligence.ChooseInvasionResponseAction(this.PrepareBotInfo(), guest.PrepareEntityInfo());
 		}
 
 		public AttackResponseAction ChooseAttackResponseAction(IEntity guest)
 		{
-			return botIntelligence.ChooseAttackResponseAction(PrepareBotInfo(), guest.PrepareEntityInfo());
-		}
-
-		public EntityInfo PrepareEntityInfo()
-		{
-			return new EntityInfo(Type, HP, AttackStrength, DefenceStrength, Location, CanShareCell, IsCollectable);
+			return botIntelligence.ChooseAttackResponseAction(this.PrepareBotInfo(), guest.PrepareEntityInfo());
 		}
 
 		public EntityType Type
@@ -77,12 +70,23 @@
 
 		public void UpdateDirection(Direction direction)
 		{
+			var previousDirection = Direction;
 			Direction = direction;
+			if (Direction != previousDirection)
+				botIntelligence.OnRotation(previousDirection, Direction);
+		}
+
+		public void UpdateLocation(Location location)
+		{
+			var previousLocation = Location;
+			Location = location;
+			if (Location != previousLocation)
+				botIntelligence.OnMove(previousLocation, Location);
 		}
 
 		public BotAction ChooseNextAction()
 		{
-			return botIntelligence.ChooseNextAction(PrepareBotInfo());
+			return botIntelligence.ChooseNextAction(this.PrepareBotInfo());
 		}
 	}
 }

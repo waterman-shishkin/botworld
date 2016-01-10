@@ -13,6 +13,5 @@
 		bool ImpactDamage(double damage);
 		InvasionResponseAction ChooseInvasionResponseAction(IEntity guest);
 		AttackResponseAction ChooseAttackResponseAction(IEntity guest);
-		EntityInfo PrepareEntityInfo();
 	}
 }

@@ -44,8 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cell.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="BotInfo.cs" />
+    <Compile Include="EntitiesExtensions.cs" />
     <Compile Include="EntityInfo.cs" />
     <Compile Include="HumanControlBotIntelligence.cs" />
     <Compile Include="IBot.cs" />
@@ -53,6 +55,7 @@
     <Compile Include="Bot.cs" />
     <Compile Include="AttackResponseAction.cs" />
     <Compile Include="EntityType.cs" />
+    <Compile Include="IMap.cs" />
     <Compile Include="IPointsProvider.cs" />
     <Compile Include="InvasionResponseAction.cs" />
     <Compile Include="BotAction.cs" />
@@ -60,6 +63,7 @@
     <Compile Include="IEntity.cs" />
     <Compile Include="IKeysSequenceSource.cs" />
     <Compile Include="Location.cs" />
+    <Compile Include="Map.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Gem.cs" />
     <Compile Include="Mine.cs" />

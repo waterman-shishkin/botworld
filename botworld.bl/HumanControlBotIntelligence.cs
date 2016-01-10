@@ -55,6 +55,18 @@ namespace botworld.bl
 			return AttackResponseAction.None;
 		}
 
+		public void OnDamage(double previousHP, double newHP)
+		{
+		}
+
+		public void OnRotation(Direction previousDirection, Direction newDirection)
+		{
+		}
+
+		public void OnMove(Location previousLocation, Location newLocation)
+		{
+		}
+
 		private void EnqueueTurnCommands(Direction direction, ConsoleKeyInfo keyPressed)
 		{
 			var desiredDirection = keyToDirection[keyPressed.Key];

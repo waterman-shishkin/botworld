@@ -2,9 +2,9 @@
 {
 	public interface IBot : IEntity
 	{
-		BotInfo PrepareBotInfo();
 		Direction Direction { get; }
 		void UpdateDirection(Direction direction);
+		void UpdateLocation(Location location);
 		BotAction ChooseNextAction();
 	}
 }

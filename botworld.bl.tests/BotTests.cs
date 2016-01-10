@@ -26,11 +26,68 @@ namespace botworld.bl.tests
 		[Test]
 		public void UpdateDirection_SetsPassedDirection()
 		{
-			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, null);
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
 
 			bot.UpdateDirection(Direction.South);
 
 			Assert.That(bot.Direction, Is.EqualTo(Direction.South));
+		}
+
+		[Test]
+		public void UpdateDirection_ForNewDirection_ResultsInBotIntelligenceNotification()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+
+			bot.UpdateDirection(Direction.South);
+
+			botIntelligence.Received(1).OnRotation(Direction.North, Direction.South);
+		}
+
+		[Test]
+		public void UpdateDirection_ForSameDirection_NotResultsInBotIntelligenceNotification()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+
+			bot.UpdateDirection(Direction.North);
+
+			botIntelligence.DidNotReceive().OnRotation(Arg.Any<Direction>(), Arg.Any<Direction>());
+		}
+
+		[Test]
+		public void UpdateLocation_SetsPassedLocation()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+
+			bot.UpdateLocation(new Location(4, 6));
+
+			Assert.That(bot.Location.X, Is.EqualTo(4));
+			Assert.That(bot.Location.Y, Is.EqualTo(6));
+		}
+
+		[Test]
+		public void UpdateLocation_ForNewLocation_ResultsInBotIntelligenceNotification()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+
+			bot.UpdateLocation(new Location(4, 6));
+
+			botIntelligence.Received(1).OnMove(new Location(2, 4), new Location(4, 6));
+		}
+
+		[Test]
+		public void UpdateLocation_ForSameLocation_NotResultsInBotIntelligenceNotification()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+
+			bot.UpdateLocation(new Location(2, 4));
+
+			botIntelligence.DidNotReceive().OnMove(Arg.Any<Location>(), Arg.Any<Location>());
 		}
 
 		[Test]
@@ -131,7 +188,8 @@ namespace botworld.bl.tests
 		[Test]
 		public void ImpactDamage_ForWeakDamage_ResultsNotIsDeadAndHPDecrease()
 		{
-			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, null);
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
 
 			bot.ImpactDamage(25);
 
@@ -142,12 +200,35 @@ namespace botworld.bl.tests
 		[Test]
 		public void ImpactDamage_ForStrongDamage_ResultsIsDeadAndZeroHP()
 		{
-			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, null);
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
 
 			bot.ImpactDamage(250);
 
 			Assert.That(bot.HP, Is.EqualTo(0));
 			Assert.That(bot.IsDead, Is.True);
+		}
+
+		[Test]
+		public void ImpactDamage_ForNotZeroDamage_ResultsInBotIntelligenceNotification()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+
+			bot.ImpactDamage(10);
+
+			botIntelligence.Received(1).OnDamage(100, 90);
+		}
+
+		[Test]
+		public void ImpactDamage_ForZeroDamage_NotResultsInBotIntelligenceNotification()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+
+			bot.ImpactDamage(0);
+
+			botIntelligence.DidNotReceive().OnDamage(Arg.Any<double>(), Arg.Any<double>());
 		}
 
 		[Test]
