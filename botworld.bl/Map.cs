@@ -27,7 +27,7 @@ namespace botworld.bl
 		public void Add(IEntity entity)
 		{
 			var location = entity.Location;
-			if (GetEntities(location).All(e => e.CanShareCell))
+			if (GetEntities(location).Any(e => !e.CanShareCell))
 				throw new InvalidOperationException("It is forbidden to place entity in same place with other entity which can not share cell");
 
 			var bot = entity as Bot;
