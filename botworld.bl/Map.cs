@@ -27,8 +27,8 @@ namespace botworld.bl
 		public void Add(IEntity entity)
 		{
 			var location = entity.Location;
-			if (GetEntities(location).Any(e => !e.CanShareCell))
-				throw new InvalidOperationException("It is forbidden to place entity in same place with other entity which can not share cell");
+			if (!CanPlaceEntity(entity, location))
+				throw new InvalidOperationException("It is forbidden to place several entities in same place if any of them can not share cell");
 
 			var bot = entity as Bot;
 			if (bot != null)
@@ -90,7 +90,13 @@ namespace botworld.bl
 
 		public bool CanMoveBot(IBot bot, Location location)
 		{
-			return GetEntities(location).All(e => e.CanShareCell);
+			return CanPlaceEntity(bot, location);
+		}
+
+		private bool CanPlaceEntity(IEntity entity, Location location)
+		{
+			var entities = GetEntities(location).ToArray();
+			return entities.All(e => e.CanShareCell) && (!entities.Any() || entity.CanShareCell);
 		}
 
 		public IEnumerable<EntityInfo> ExploreNeighborCell(IBot bot)
