@@ -221,5 +221,140 @@ namespace botworld.bl.tests
 
 			Assert.That(map.GetEntities(location).Single(), Is.EqualTo(bot2));
 		}
+
+		[Test]
+		public void GetEntities_ForEmptyLocation_ReturnsEmptyCollection()
+		{
+			var map = new Map(10, 20);
+			var location = new Location(2, 4);
+
+			var entities = map.GetEntities(location);
+
+			Assert.That(entities.Count(), Is.EqualTo(0));
+		}
+
+		[Test]
+		public void GetEntities_ForOccupiedLocation_ReturnsExpectedCollection()
+		{
+			var map = new Map(10, 20);
+			var location = new Location(2, 4);
+			var bot1 = Substitute.For<IBot>();
+			bot1.Location.Returns(location);
+			bot1.CanShareCell.Returns(true);
+			var entity1 = Substitute.For<IEntity>();
+			entity1.Location.Returns(location);
+			entity1.CanShareCell.Returns(true);
+			var bot2 = Substitute.For<IBot>();
+			bot2.Location.Returns(location);
+			bot2.CanShareCell.Returns(true);
+			var entity2 = Substitute.For<IEntity>();
+			entity2.Location.Returns(location);
+			entity2.CanShareCell.Returns(true);
+
+			map.Add(bot1);
+			map.Add(entity1);
+			map.Add(bot2);
+			map.Add(entity2);
+
+			var entities = map.GetEntities(location);
+
+			var expectedEntities = new[] {entity1, bot1, entity2, bot2};
+			Assert.That(entities.All(expectedEntities.Contains) && expectedEntities.Length == entities.Count(), Is.True);
+		}
+
+		[Test]
+		public void GetEntities_ForEmptyMap_ReturnsEmptyCollection()
+		{
+			var map = new Map(10, 20);
+
+			var entities = map.GetEntities();
+
+			Assert.That(entities.Count(), Is.EqualTo(0));
+		}
+
+		[Test]
+		public void GetEntities_ForOccupiedMap_ReturnsExpectedCollection()
+		{
+			var map = new Map(10, 20);
+			var bot1 = Substitute.For<IBot>();
+			bot1.Location.Returns(new Location(1, 2));
+			bot1.CanShareCell.Returns(true);
+			var entity1 = Substitute.For<IEntity>();
+			entity1.Location.Returns(new Location(2, 4));
+			entity1.CanShareCell.Returns(true);
+			var bot2 = Substitute.For<IBot>();
+			bot2.Location.Returns(new Location(6, 8));
+			bot2.CanShareCell.Returns(true);
+			var entity2 = Substitute.For<IEntity>();
+			entity2.Location.Returns(new Location(5, 5));
+			entity2.CanShareCell.Returns(true);
+
+			map.Add(bot1);
+			map.Add(entity1);
+			map.Add(bot2);
+			map.Add(entity2);
+
+			var entities = map.GetEntities();
+
+			var expectedEntities = new[] {entity1, bot1, entity2, bot2};
+			Assert.That(entities.All(expectedEntities.Contains) && expectedEntities.Length == entities.Count(), Is.True);
+		}
+
+		[Test]
+		public void GetBots_ForEmptyMap_ReturnsEmptyCollection()
+		{
+			var map = new Map(10, 20);
+
+			var bots = map.GetBots();
+
+			Assert.That(bots.Count(), Is.EqualTo(0));
+		}
+
+		[Test]
+		public void GetBots_ForMapOccupiedNotByBots_ReturnsEmptyCollection()
+		{
+			var map = new Map(10, 20);
+			var entity1 = Substitute.For<IEntity>();
+			entity1.Location.Returns(new Location(2, 4));
+			entity1.CanShareCell.Returns(true);
+			var entity2 = Substitute.For<IEntity>();
+			entity2.Location.Returns(new Location(5, 5));
+			entity2.CanShareCell.Returns(true);
+
+			map.Add(entity1);
+			map.Add(entity2);
+
+			var bots = map.GetBots();
+
+			Assert.That(bots.Count(), Is.EqualTo(0));
+		}
+
+		[Test]
+		public void GetBots_ForMapOccupiedByBotsAndOtherEntities_ReturnsExpectedCollection()
+		{
+			var map = new Map(10, 20);
+			var bot1 = Substitute.For<IBot>();
+			bot1.Location.Returns(new Location(1, 2));
+			bot1.CanShareCell.Returns(true);
+			var entity1 = Substitute.For<IEntity>();
+			entity1.Location.Returns(new Location(2, 4));
+			entity1.CanShareCell.Returns(true);
+			var bot2 = Substitute.For<IBot>();
+			bot2.Location.Returns(new Location(6, 8));
+			bot2.CanShareCell.Returns(true);
+			var entity2 = Substitute.For<IEntity>();
+			entity2.Location.Returns(new Location(5, 5));
+			entity2.CanShareCell.Returns(true);
+
+			map.Add(bot1);
+			map.Add(entity1);
+			map.Add(bot2);
+			map.Add(entity2);
+
+			var bots = map.GetBots();
+
+			var expectedBots = new[] {bot1, bot2};
+			Assert.That(bots.All(expectedBots.Contains) && expectedBots.Length == bots.Count(), Is.True);
+		}
 	}
 }

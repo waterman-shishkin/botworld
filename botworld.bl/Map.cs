@@ -30,7 +30,7 @@ namespace botworld.bl
 			if (!CanPlaceEntity(entity, location))
 				throw new InvalidOperationException("It is forbidden to place several entities in same place if any of them can not share cell");
 
-			var bot = entity as Bot;
+			var bot = entity as IBot;
 			if (bot != null)
 			{
 				bots.Add(bot);
@@ -51,7 +51,7 @@ namespace botworld.bl
 
 		public void Remove(IEntity entity)
 		{
-			var bot = entity as Bot;
+			var bot = entity as IBot;
 			if (bot != null)
 				bots.Remove(bot);
 			else
