@@ -98,6 +98,8 @@ namespace botworld.bl
 		{
 			EnsureIsHostedEntity(bot);
 			EnsureLocationIsInRange(location);
+			if (bot.Location == location)
+				return true;
 			return CanPlaceEntity(bot, location);
 		}
 

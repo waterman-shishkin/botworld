@@ -51,8 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MapTests.cs" />
     <Compile Include="HumanControlBotIntelligenceTests.cs" />
+    <Compile Include="MapTests.cs" />
     <Compile Include="WallTests.cs" />
     <Compile Include="MineTests.cs" />
     <Compile Include="GemTests.cs" />

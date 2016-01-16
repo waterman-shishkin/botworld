@@ -414,5 +414,251 @@ namespace botworld.bl.tests
 			var expectedBots = new[] {bot1, bot2};
 			Assert.That(bots.All(expectedBots.Contains) && expectedBots.Length == bots.Count(), Is.True);
 		}
+
+		[Test]
+		public void MoveBot_ForBotNotHostedByMap_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(6, 8));
+
+			var action = new TestDelegate(() => map.MoveBot(bot, new Location(2, 4), Direction.North));
+
+			Assert.Throws<InvalidOperationException>(action);
+		}
+
+		[Test]
+		public void MoveBot_ToLocationOutOfRange_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(2, 4));
+			map.Add(bot);
+
+			var action = new TestDelegate(() => map.MoveBot(bot, new Location(-1, 4), Direction.North));
+
+			Assert.Throws<IndexOutOfRangeException>(action);
+		}
+
+		[Test]
+		public void MoveBot_WithNewLocationAndDirection_CausesBotToUpdateLocationAndDirection()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(2, 4));
+			bot.Direction.Returns(Direction.North);
+			map.Add(bot);
+
+			var location = new Location(4, 6);
+			var direction = Direction.South;
+			map.MoveBot(bot, location, direction);
+
+			bot.Received(1).UpdateLocation(location);
+			bot.Received(1).UpdateDirection(direction);
+		}
+
+		[Test]
+		public void MoveBot_WithNewLocationAndOldDirection_CausesBotToUpdateLocationOnly()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(2, 4));
+			var direction = Direction.North;
+			bot.Direction.Returns(direction);
+			map.Add(bot);
+
+			var location = new Location(4, 6);
+			map.MoveBot(bot, location, direction);
+
+			bot.Received(1).UpdateLocation(location);
+			bot.DidNotReceive().UpdateDirection(Arg.Any<Direction>());
+		}
+
+		[Test]
+		public void MoveBot_WithOldLocationAndNewDirection_CausesBotToUpdateDirectionOnly()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			var location = new Location(2, 4);
+			bot.Location.Returns(location);
+			bot.Direction.Returns(Direction.North);
+			map.Add(bot);
+
+			var direction = Direction.South;
+			map.MoveBot(bot, location, direction);
+
+			bot.DidNotReceive().UpdateLocation(Arg.Any<Location>());
+			bot.Received(1).UpdateDirection(direction);
+		}
+
+		[Test]
+		public void MoveBot_WithOldLocationAndOldDirection_NotCausesBotToUpdateLocationOrDirection()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			var location = new Location(2, 4);
+			bot.Location.Returns(location);
+			var direction = Direction.North;
+			bot.Direction.Returns(direction);
+			map.Add(bot);
+
+			map.MoveBot(bot, location, direction);
+
+			bot.DidNotReceive().UpdateLocation(Arg.Any<Location>());
+			bot.DidNotReceive().UpdateDirection(Arg.Any<Direction>());
+		}
+
+		[Test]
+		public void MoveBot_ForFriendlyBotAndLocationOccupiedByFriendlyEntity_CausesBotToUpdateLocation()
+		{
+			var map = new Map(10, 20);
+			var location = new Location(2, 4);
+			var entity = Substitute.For<IEntity>();
+			entity.Location.Returns(location);
+			entity.CanShareCell.Returns(true);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(4, 6));
+			bot.CanShareCell.Returns(true);
+			map.Add(entity);
+			map.Add(bot);
+
+			map.MoveBot(bot, location, Direction.North);
+
+			bot.Received(1).UpdateLocation(location);
+		}
+
+		[Test]
+		public void MoveBot_ForFriendlyBotAndLocationOccupiedByNotFriendlyEntity_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var location = new Location(2, 4);
+			var entity = Substitute.For<IEntity>();
+			entity.Location.Returns(location);
+			entity.CanShareCell.Returns(false);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(4, 6));
+			bot.CanShareCell.Returns(true);
+			map.Add(entity);
+			map.Add(bot);
+
+			var action = new TestDelegate(() => map.MoveBot(bot, location, Direction.North));
+
+			Assert.Throws<InvalidOperationException>(action);
+		}
+
+		[Test]
+		public void MoveBot_ForNotFriendlyBotAndLocationOccupiedByFriendlyEntity_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var location = new Location(2, 4);
+			var entity = Substitute.For<IEntity>();
+			entity.Location.Returns(location);
+			entity.CanShareCell.Returns(true);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(4, 6));
+			bot.CanShareCell.Returns(false);
+			map.Add(entity);
+			map.Add(bot);
+
+			var action = new TestDelegate(() => map.MoveBot(bot, location, Direction.North));
+
+			Assert.Throws<InvalidOperationException>(action);
+		}
+
+		[Test]
+		public void CanMoveBot_ForBotNotHostedByMap_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(6, 8));
+
+			var action = new TestDelegate(() => map.CanMoveBot(bot, new Location(2, 4)));
+
+			Assert.Throws<InvalidOperationException>(action);
+		}
+
+		[Test]
+		public void CanMoveBot_ForLocationOutOfRange_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(2, 4));
+			map.Add(bot);
+
+			var action = new TestDelegate(() => map.CanMoveBot(bot, new Location(-1, 4)));
+
+			Assert.Throws<IndexOutOfRangeException>(action);
+		}
+
+		[Test]
+		public void CanMoveBot_WithSameLocation_ReturnsTrue()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			var location = new Location(2, 4);
+			bot.Location.Returns(location);
+			map.Add(bot);
+
+			var canMove = map.CanMoveBot(bot, location);
+
+			Assert.That(canMove, Is.True);
+		}
+
+		[Test]
+		public void CanMoveBot_ForFriendlyBotAndLocationOccupiedByFriendlyEntity_ReturnsTrue()
+		{
+			var map = new Map(10, 20);
+			var location = new Location(2, 4);
+			var entity = Substitute.For<IEntity>();
+			entity.Location.Returns(location);
+			entity.CanShareCell.Returns(true);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(4, 6));
+			bot.CanShareCell.Returns(true);
+			map.Add(entity);
+			map.Add(bot);
+
+			var canMove = map.CanMoveBot(bot, location);
+
+			Assert.That(canMove, Is.True);
+		}
+
+		[Test]
+		public void CanMoveBot_ForFriendlyBotAndLocationOccupiedByNotFriendlyEntity_ReturnsFalse()
+		{
+			var map = new Map(10, 20);
+			var location = new Location(2, 4);
+			var entity = Substitute.For<IEntity>();
+			entity.Location.Returns(location);
+			entity.CanShareCell.Returns(false);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(4, 6));
+			bot.CanShareCell.Returns(true);
+			map.Add(entity);
+			map.Add(bot);
+
+			var canMove = map.CanMoveBot(bot, location);
+
+			Assert.That(canMove, Is.False);
+		}
+
+		[Test]
+		public void CanMoveBot_ForNotFriendlyBotAndLocationOccupiedByFriendlyEntity_ReturnsFalse()
+		{
+			var map = new Map(10, 20);
+			var location = new Location(2, 4);
+			var entity = Substitute.For<IEntity>();
+			entity.Location.Returns(location);
+			entity.CanShareCell.Returns(true);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(4, 6));
+			bot.CanShareCell.Returns(false);
+			map.Add(entity);
+			map.Add(bot);
+
+			var canMove = map.CanMoveBot(bot, location);
+
+			Assert.That(canMove, Is.False);
+		}
 	}
 }
