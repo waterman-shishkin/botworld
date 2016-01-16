@@ -25,6 +25,30 @@ namespace botworld.bl.tests
 		}
 
 		[Test]
+		public void Add_EntityWithLocationOutOfRange_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var entity = Substitute.For<IEntity>();
+			entity.Location.Returns(new Location(2, 40));
+
+			var action = new TestDelegate(() => map.Add(entity));
+
+			Assert.Throws<IndexOutOfRangeException>(action);
+		}
+
+		[Test]
+		public void Add_BotWithLocationOutOfRange_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(2, 40));
+
+			var action = new TestDelegate(() => map.Add(bot));
+
+			Assert.Throws<IndexOutOfRangeException>(action);
+		}
+
+		[Test]
 		public void Add_Entity_PlacesItInSpecifiedLocation()
 		{
 			var map = new Map(10, 20);
@@ -159,6 +183,30 @@ namespace botworld.bl.tests
 		}
 
 		[Test]
+		public void Remove_EntityNotHostedByMap_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var entity = Substitute.For<IEntity>();
+			entity.Location.Returns(new Location(2, 4));
+
+			var action = new TestDelegate(() => map.Remove(entity));
+
+			Assert.Throws<InvalidOperationException>(action);
+		}
+
+		[Test]
+		public void Remove_BotNotHostedByMap_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(2, 4));
+
+			var action = new TestDelegate(() => map.Remove(bot));
+
+			Assert.Throws<InvalidOperationException>(action);
+		}
+
+		[Test]
 		public void Remove_Entity_RemovesEntityFromMap()
 		{
 			var map = new Map(10, 20);
@@ -220,6 +268,16 @@ namespace botworld.bl.tests
 			map.Remove(bot1);
 
 			Assert.That(map.GetEntities(location).Single(), Is.EqualTo(bot2));
+		}
+
+		[Test]
+		public void GetEntities_ForLocationOutOfRange_ThrowException()
+		{
+			var map = new Map(10, 20);
+
+			var action = new TestDelegate(() => map.GetEntities(new Location(2, 40)));
+
+			Assert.Throws<IndexOutOfRangeException>(action);
 		}
 
 		[Test]
