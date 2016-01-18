@@ -86,7 +86,7 @@ namespace botworld.bl
 			{
 				if (!CanMoveBot(bot, newLocation))
 					throw new InvalidOperationException("It is impossible to move bot to location passed");
-				ExploreCell(bot);
+				ExploreCell(bot, newLocation);
 				bot.UpdateLocation(newLocation);
 			}
 			var direction = bot.Direction;
@@ -159,7 +159,7 @@ namespace botworld.bl
 
 		public bool IsInRange(Location location)
 		{
-			return location.X >= 0 && location.X < Width && location.Y >= 0 && location.Y < Width;
+			return location.X >= 0 && location.X < Width && location.Y >= 0 && location.Y < Height;
 		}
 
 		private void EnsureIsHostedEntity(IEntity entity)

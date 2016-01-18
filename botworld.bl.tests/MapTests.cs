@@ -660,5 +660,203 @@ namespace botworld.bl.tests
 
 			Assert.That(canMove, Is.False);
 		}
+
+		[Test]
+		public void IsInRange_ForLocationInMapRange_ReturnsTrue()
+		{
+			var map = new Map(10, 20);
+
+			var isInRange = map.IsInRange(new Location(2, 4));
+
+			Assert.That(isInRange, Is.True);
+		}
+
+		[Test]
+		public void IsInRange_ForLocationAtNorthMapBorder_ReturnsTrue()
+		{
+			var map = new Map(10, 20);
+
+			var isInRange = map.IsInRange(new Location(2, 0));
+
+			Assert.That(isInRange, Is.True);
+		}
+
+		[Test]
+		public void IsInRange_ForLocationAtSouthMapBorder_ReturnsTrue()
+		{
+			var map = new Map(10, 20);
+
+			var isInRange = map.IsInRange(new Location(2, 19));
+
+			Assert.That(isInRange, Is.True);
+		}
+
+		[Test]
+		public void IsInRange_ForLocationAtWestMapBorder_ReturnsTrue()
+		{
+			var map = new Map(10, 20);
+
+			var isInRange = map.IsInRange(new Location(0, 4));
+
+			Assert.That(isInRange, Is.True);
+		}
+
+		[Test]
+		public void IsInRange_ForLocationAtEastMapBorder_ReturnsTrue()
+		{
+			var map = new Map(10, 20);
+
+			var isInRange = map.IsInRange(new Location(9, 4));
+
+			Assert.That(isInRange, Is.True);
+		}
+
+		[Test]
+		public void IsInRange_ForLocationBehindNorthMapBorder_ReturnsFalse()
+		{
+			var map = new Map(10, 20);
+
+			var isInRange = map.IsInRange(new Location(2, -1));
+
+			Assert.That(isInRange, Is.False);
+		}
+
+		[Test]
+		public void IsInRange_ForLocationBehindSouthMapBorder_ReturnsFalse()
+		{
+			var map = new Map(10, 20);
+
+			var isInRange = map.IsInRange(new Location(2, 20));
+
+			Assert.That(isInRange, Is.False);
+		}
+
+		[Test]
+		public void IsInRange_ForLocationBehindWestMapBorder_ReturnsFalse()
+		{
+			var map = new Map(10, 20);
+
+			var isInRange = map.IsInRange(new Location(-1, 4));
+
+			Assert.That(isInRange, Is.False);
+		}
+
+		[Test]
+		public void IsInRange_ForLocationBehindEastMapBorder_ReturnsFalse()
+		{
+			var map = new Map(10, 20);
+
+			var isInRange = map.IsInRange(new Location(10, 4));
+
+			Assert.That(isInRange, Is.False);
+		}
+
+		[Test]
+		public void IsExplored_ForBotNotHostedByMap_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			var location = new Location(2, 4);
+			bot.Location.Returns(location);
+
+			var action = new TestDelegate(() => map.IsExplored(bot, location));
+
+			Assert.Throws<InvalidOperationException>(action);
+		}
+
+		[Test]
+		public void IsExplored_ToLocationOutOfRange_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(2, 4));
+			map.Add(bot);
+
+			var action = new TestDelegate(() => map.IsExplored(bot, new Location(-1, 4)));
+
+			Assert.Throws<IndexOutOfRangeException>(action);
+		}
+
+		[Test]
+		public void IsExplored_ForNeverOcuupiedLocation_ReturnsFalse()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(2, 4));
+			map.Add(bot);
+
+			var isExplored = map.IsExplored(bot, new Location(1, 4));
+
+			Assert.That(isExplored, Is.False);
+		}
+
+		[Test]
+		public void IsExplored_ForBotSeedLocation_ReturnsTrue()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			var location = new Location(2, 4);
+			bot.Location.Returns(location);
+			map.Add(bot);
+
+			var isExplored = map.IsExplored(bot, location);
+
+			Assert.That(isExplored, Is.True);
+		}
+
+		[Test]
+		public void IsExplored_AfterBotMoveForOldAndNewLocations_ReturnsTrue()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			var oldLocation = new Location(2, 4);
+			bot.Location.Returns(oldLocation);
+			map.Add(bot);
+			var newLocation = new Location(3, 4);
+			map.MoveBot(bot, newLocation, bot.Direction);
+
+			var isOldExplored = map.IsExplored(bot, oldLocation);
+			var isNewExplored = map.IsExplored(bot, newLocation);
+
+			Assert.That(isOldExplored, Is.True);
+			Assert.That(isNewExplored, Is.True);
+		}
+
+		[Test]
+		public void IsExplored_ForExploredLocation_ReturnsTrue()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			var location = new Location(2, 4);
+			bot.Location.Returns(location);
+			bot.Direction.Returns(Direction.North);
+			map.Add(bot);
+			map.ExploreNeighborCell(bot);
+
+			var isExplored = map.IsExplored(bot, new Location(2, 3));
+
+			Assert.That(isExplored, Is.True);
+		}
+
+		[Test]
+		public void IsExplored_ForCellExploredByOtherBot_ReturnsFalse()
+		{
+			var map = new Map(10, 20);
+			var bot1 = Substitute.For<IBot>();
+			var location1 = new Location(2, 4);
+			bot1.Location.Returns(location1);
+			map.Add(bot1);
+			var bot2 = Substitute.For<IBot>();
+			var location2 = new Location(4, 6);
+			bot2.Location.Returns(location2);
+			map.Add(bot2);
+
+			var isExplored = map.IsExplored(bot1, location2);
+
+			Assert.That(isExplored, Is.False);
+		}
+
+		//GetNeighborsInfo
+		//ExploreNeighborCell
 	}
 }
