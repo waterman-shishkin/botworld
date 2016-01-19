@@ -26,11 +26,12 @@ namespace botworld.bl
 
 		public void Add(IEntity entity)
 		{
+			EnsureEntityIsInRange(entity);
 			var location = entity.Location;
-			if (GetEntities(location).Any(e => !e.CanShareCell))
-				throw new InvalidOperationException("It is forbidden to place entity in same place with other entity which can not share cell");
+			if (!CanPlaceEntity(entity, location))
+				throw new InvalidOperationException("It is forbidden to place several entities in same place if any of them can not share cell");
 
-			var bot = entity as Bot;
+			var bot = entity as IBot;
 			if (bot != null)
 			{
 				bots.Add(bot);
@@ -43,6 +44,7 @@ namespace botworld.bl
 
 		private Cell GetCell(Location location)
 		{
+			EnsureLocationIsInRange(location);
 			var cell = cells[location.X][location.Y];
 			if (cell == null)
 				cells[location.X][location.Y] = cell = new Cell();
@@ -51,7 +53,8 @@ namespace botworld.bl
 
 		public void Remove(IEntity entity)
 		{
-			var bot = entity as Bot;
+			EnsureIsHostedEntity(entity);
+			var bot = entity as IBot;
 			if (bot != null)
 				bots.Remove(bot);
 			else
@@ -60,6 +63,7 @@ namespace botworld.bl
 
 		public IEnumerable<IEntity> GetEntities(Location location)
 		{
+			EnsureLocationIsInRange(location);
 			return GetCell(location).Entities.Concat(bots.Where(b => b.Location == location));
 		}
 
@@ -75,12 +79,14 @@ namespace botworld.bl
 
 		public void MoveBot(IBot bot, Location newLocation, Direction newDirection)
 		{
+			EnsureIsHostedEntity(bot);
+			EnsureLocationIsInRange(newLocation);
 			var location = bot.Location;
 			if (location != newLocation)
 			{
 				if (!CanMoveBot(bot, newLocation))
 					throw new InvalidOperationException("It is impossible to move bot to location passed");
-				ExploreCell(bot);
+				ExploreCell(bot, newLocation);
 				bot.UpdateLocation(newLocation);
 			}
 			var direction = bot.Direction;
@@ -90,7 +96,18 @@ namespace botworld.bl
 
 		public bool CanMoveBot(IBot bot, Location location)
 		{
-			return GetEntities(location).All(e => e.CanShareCell);
+			EnsureIsHostedEntity(bot);
+			EnsureLocationIsInRange(location);
+			if (bot.Location == location)
+				return true;
+			return CanPlaceEntity(bot, location);
+		}
+
+		private bool CanPlaceEntity(IEntity entity, Location location)
+		{
+			EnsureLocationIsInRange(location);
+			var entities = GetEntities(location).ToArray();
+			return entities.All(e => e.CanShareCell) && (!entities.Any() || entity.CanShareCell);
 		}
 
 		public IEnumerable<EntityInfo> ExploreNeighborCell(IBot bot)
@@ -107,17 +124,21 @@ namespace botworld.bl
 
 		private IEnumerable<EntityInfo> ExploreCell(IBot bot, Location location)
 		{
+			EnsureIsHostedEntity(bot);
+			EnsureLocationIsInRange(location);
 			GetCell(location).VisitorsIds.Add(botIds[bot]);
 			return GetEntitiesInfo(location);
 		}
 
 		private IEnumerable<EntityInfo> GetEntitiesInfo(Location location)
 		{
+			EnsureLocationIsInRange(location);
 			return GetEntities(location).Select(e => e.PrepareEntityInfo());
 		}
 
 		public Dictionary<Location, IEnumerable<EntityInfo>> GetNeighborsInfo(IBot bot)
 		{
+			EnsureIsHostedEntity(bot);
 			var result = new Dictionary<Location, IEnumerable<EntityInfo>> { { bot.Location, GetEntitiesInfo(bot.Location) } };
 			var directions = Enum.GetValues(typeof(Direction)).Cast<Direction>().ToArray();
 			foreach (var direction in directions)
@@ -131,12 +152,33 @@ namespace botworld.bl
 
 		public bool IsExplored(IBot bot, Location location)
 		{
+			EnsureIsHostedEntity(bot);
+			EnsureLocationIsInRange(location);
 			return GetCell(location).VisitorsIds.Contains(botIds[bot]);
 		}
 
 		public bool IsInRange(Location location)
 		{
-			return location.X >= 0 && location.X < Width && location.Y >= 0 && location.Y < Width;
+			return location.X >= 0 && location.X < Width && location.Y >= 0 && location.Y < Height;
+		}
+
+		private void EnsureIsHostedEntity(IEntity entity)
+		{
+			EnsureEntityIsInRange(entity);
+			if (!GetEntities(entity.Location).Contains(entity))
+				throw new InvalidOperationException("Can not find specified entity in its location");
+		}
+
+		private void EnsureEntityIsInRange(IEntity entity)
+		{
+			if (!IsInRange(entity.Location))
+				throw new IndexOutOfRangeException("The entity location is out of the map range");
+		}
+
+		private void EnsureLocationIsInRange(Location location)
+		{
+			if (!IsInRange(location))
+				throw new IndexOutOfRangeException("The specified location is out of the map range");
 		}
 	}
 }
