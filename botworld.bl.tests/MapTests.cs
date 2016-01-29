@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
@@ -856,7 +857,109 @@ namespace botworld.bl.tests
 			Assert.That(isExplored, Is.False);
 		}
 
+		[Test]
+		public void GetNeighborsInfo_ForBotNotHostedByMap_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			var location = new Location(2, 4);
+			bot.Location.Returns(location);
+
+			var action = new TestDelegate(() => map.GetNeighborsInfo(bot));
+
+			Assert.Throws<InvalidOperationException>(action);
+		}
+
+		[Test]
+		public void GetNeighborsInfo_ForBotExploredOnlyItsLocation_ReturnsInfoOnlyForThisLocationWhichIsEmpty()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			var location = new Location(2, 4);
+			bot.Location.Returns(location);
+			map.Add(bot);
+
+			var info = map.GetNeighborsInfo(bot);
+
+			Assert.That(info.Keys.Single(), Is.EqualTo(location));
+			Assert.That(info.Values.Single().Count(), Is.EqualTo(0));
+		}
+
+		[Test]
+		public void GetNeighborsInfo_ForBotExploredSomeCellsAroundItsLocation_ReturnsInfoOnlyForTheseLocations()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			var location = new Location(2, 4);
+			bot.Location.Returns(location);
+			bot.CanShareCell.Returns(true);
+			map.Add(bot);
+			var locations = new[] {location, new Location(1, 4), new Location(2, 5), new Location(2, 3)};
+			var expectedInfos = new [] {new List<EntityInfo> {new EntityInfo(EntityType.Gem, 10, 10, 10, locations[0], true, true), new BotInfo(10, 10, 10, locations[0], Direction.North )}, 
+										new List<EntityInfo> {new EntityInfo(EntityType.Mine, 20, 20, 20, locations[1], true, false), new BotInfo(20, 20, 20, locations[1], Direction.South)}, 
+										new List<EntityInfo> {new EntityInfo(EntityType.Wall, 30, 30, 20, locations[2], false, false)}, 
+										new List<EntityInfo>()};
+
+			foreach (var entity in expectedInfos.SelectMany(l => l).Select(CreateEntity))
+				map.Add(entity);
+
+			bot.Direction.Returns(Direction.West);
+			map.ExploreNeighborCell(bot);
+			bot.Direction.Returns(Direction.South);
+			map.ExploreNeighborCell(bot);
+			bot.Direction.Returns(Direction.North);
+			map.ExploreNeighborCell(bot);
+			
+			var info = map.GetNeighborsInfo(bot);
+
+			Assert.That(info.Keys.Count(), Is.EqualTo(locations.Length));
+			for (var i = 0; i < locations.Length; i++)
+			{
+				var expectedLocation = locations[i];
+				var locationInfo = info[expectedLocation].ToArray();
+				Assert.That(locationInfo.Length, Is.EqualTo(expectedInfos[i].Count));
+				for (var j = 0; j < locationInfo.Length; j++)
+				{
+					var entityInfo = locationInfo[j];
+					var expectedInfo = expectedInfos[i][j];
+					Assert.That(entityInfo.Type, Is.EqualTo(expectedInfo.Type));
+					Assert.That(entityInfo.HP, Is.EqualTo(expectedInfo.HP));
+					Assert.That(entityInfo.AttackStrength, Is.EqualTo(expectedInfo.AttackStrength));
+					Assert.That(entityInfo.DefenceStrength, Is.EqualTo(expectedInfo.DefenceStrength));
+					Assert.That(entityInfo.Location, Is.EqualTo(expectedInfo.Location));
+					Assert.That(entityInfo.CanShareCell, Is.EqualTo(expectedInfo.CanShareCell));
+					Assert.That(entityInfo.IsCollectable, Is.EqualTo(expectedInfo.IsCollectable));
+					if (entityInfo.Type == EntityType.Bot)
+						Assert.That(((BotInfo)entityInfo).Direction, Is.EqualTo(((BotInfo)expectedInfo).Direction));
+				}
+			}
+		}
+
+		private static IEntity CreateEntity(EntityInfo entityInfo)
+		{
+			var entity = entityInfo.Type == EntityType.Bot ? Substitute.For<IBot>() : Substitute.For<IEntity>();
+			entity.Type.Returns(entityInfo.Type);
+			entity.HP.Returns(entityInfo.HP);
+			entity.AttackStrength.Returns(entityInfo.AttackStrength);
+			entity.DefenceStrength.Returns(entityInfo.DefenceStrength);
+			entity.Location.Returns(entityInfo.Location);
+			entity.CanShareCell.Returns(entityInfo.CanShareCell);
+			entity.IsCollectable.Returns(entityInfo.IsCollectable);
+			if (entityInfo.Type == EntityType.Bot)
+				((IBot)entity).Direction.Returns(((BotInfo)entityInfo).Direction);
+			return entity;
+		}
+
 		//GetNeighborsInfo
+		//границы
+
 		//ExploreNeighborCell
+		//свой-чужой
+		//заграница
+		//пометка исследованных
+		//информация о клетке
+		//боты и не боты
+		//много всяких
+		//границы
 	}
 }

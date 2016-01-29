@@ -133,13 +133,20 @@ namespace botworld.bl
 		private IEnumerable<EntityInfo> GetEntitiesInfo(Location location)
 		{
 			EnsureLocationIsInRange(location);
-			return GetEntities(location).Select(e => e.PrepareEntityInfo());
+			return GetEntities(location).Select(e => e is IBot ? ((IBot)e).PrepareBotInfo() : e.PrepareEntityInfo());
+		}
+
+		private IEnumerable<EntityInfo> GetEntitiesInfo(IBot bot)
+		{
+			EnsureIsHostedEntity(bot);
+			var location = bot.Location;
+			return GetEntities(location).Where(e => e!= bot).Select(e => e is IBot ? ((IBot)e).PrepareBotInfo() : e.PrepareEntityInfo());
 		}
 
 		public Dictionary<Location, IEnumerable<EntityInfo>> GetNeighborsInfo(IBot bot)
 		{
 			EnsureIsHostedEntity(bot);
-			var result = new Dictionary<Location, IEnumerable<EntityInfo>> { { bot.Location, GetEntitiesInfo(bot.Location) } };
+			var result = new Dictionary<Location, IEnumerable<EntityInfo>> { { bot.Location, GetEntitiesInfo(bot) } };
 			var directions = Enum.GetValues(typeof(Direction)).Cast<Direction>().ToArray();
 			foreach (var direction in directions)
 			{
