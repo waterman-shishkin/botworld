@@ -935,6 +935,100 @@ namespace botworld.bl.tests
 			}
 		}
 
+		[Test]
+		public void GetNeighborsInfo_ForBotLocatedAtNorthWestBoundaries_ReturnsInfoForExploredLocations()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			var location = new Location(0, 0);
+			bot.Location.Returns(location);
+			bot.CanShareCell.Returns(true);
+			map.Add(bot);
+			var locations = new[] {location, new Location(1, 0), new Location(0, 1)};
+			var expectedInfos = new [] {new List<EntityInfo> {new EntityInfo(EntityType.Gem, 10, 10, 10, locations[0], true, true), new BotInfo(10, 10, 10, locations[0], Direction.North )}, 
+										new List<EntityInfo> {new EntityInfo(EntityType.Mine, 20, 20, 20, locations[1], true, false)}, 
+										new List<EntityInfo>()};
+
+			foreach (var entity in expectedInfos.SelectMany(l => l).Select(CreateEntity))
+				map.Add(entity);
+
+			bot.Direction.Returns(Direction.East);
+			map.ExploreNeighborCell(bot);
+			bot.Direction.Returns(Direction.South);
+			map.ExploreNeighborCell(bot);
+			
+			var info = map.GetNeighborsInfo(bot);
+
+			Assert.That(info.Keys.Count(), Is.EqualTo(locations.Length));
+			for (var i = 0; i < locations.Length; i++)
+			{
+				var expectedLocation = locations[i];
+				var locationInfo = info[expectedLocation].ToArray();
+				Assert.That(locationInfo.Length, Is.EqualTo(expectedInfos[i].Count));
+				for (var j = 0; j < locationInfo.Length; j++)
+				{
+					var entityInfo = locationInfo[j];
+					var expectedInfo = expectedInfos[i][j];
+					Assert.That(entityInfo.Type, Is.EqualTo(expectedInfo.Type));
+					Assert.That(entityInfo.HP, Is.EqualTo(expectedInfo.HP));
+					Assert.That(entityInfo.AttackStrength, Is.EqualTo(expectedInfo.AttackStrength));
+					Assert.That(entityInfo.DefenceStrength, Is.EqualTo(expectedInfo.DefenceStrength));
+					Assert.That(entityInfo.Location, Is.EqualTo(expectedInfo.Location));
+					Assert.That(entityInfo.CanShareCell, Is.EqualTo(expectedInfo.CanShareCell));
+					Assert.That(entityInfo.IsCollectable, Is.EqualTo(expectedInfo.IsCollectable));
+					if (entityInfo.Type == EntityType.Bot)
+						Assert.That(((BotInfo)entityInfo).Direction, Is.EqualTo(((BotInfo)expectedInfo).Direction));
+				}
+			}
+		}
+
+		[Test]
+		public void GetNeighborsInfo_ForBotLocatedAtSouthEastBoundaries_ReturnsInfoForExploredLocations()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			var location = new Location(9, 19);
+			bot.Location.Returns(location);
+			bot.CanShareCell.Returns(true);
+			map.Add(bot);
+			var locations = new[] {location, new Location(8, 19), new Location(9, 18)};
+			var expectedInfos = new [] {new List<EntityInfo> {new EntityInfo(EntityType.Gem, 10, 10, 10, locations[0], true, true), new BotInfo(10, 10, 10, locations[0], Direction.North )}, 
+										new List<EntityInfo> {new EntityInfo(EntityType.Mine, 20, 20, 20, locations[1], true, false)}, 
+										new List<EntityInfo>()};
+
+			foreach (var entity in expectedInfos.SelectMany(l => l).Select(CreateEntity))
+				map.Add(entity);
+
+			bot.Direction.Returns(Direction.West);
+			map.ExploreNeighborCell(bot);
+			bot.Direction.Returns(Direction.North);
+			map.ExploreNeighborCell(bot);
+			
+			var info = map.GetNeighborsInfo(bot);
+
+			Assert.That(info.Keys.Count(), Is.EqualTo(locations.Length));
+			for (var i = 0; i < locations.Length; i++)
+			{
+				var expectedLocation = locations[i];
+				var locationInfo = info[expectedLocation].ToArray();
+				Assert.That(locationInfo.Length, Is.EqualTo(expectedInfos[i].Count));
+				for (var j = 0; j < locationInfo.Length; j++)
+				{
+					var entityInfo = locationInfo[j];
+					var expectedInfo = expectedInfos[i][j];
+					Assert.That(entityInfo.Type, Is.EqualTo(expectedInfo.Type));
+					Assert.That(entityInfo.HP, Is.EqualTo(expectedInfo.HP));
+					Assert.That(entityInfo.AttackStrength, Is.EqualTo(expectedInfo.AttackStrength));
+					Assert.That(entityInfo.DefenceStrength, Is.EqualTo(expectedInfo.DefenceStrength));
+					Assert.That(entityInfo.Location, Is.EqualTo(expectedInfo.Location));
+					Assert.That(entityInfo.CanShareCell, Is.EqualTo(expectedInfo.CanShareCell));
+					Assert.That(entityInfo.IsCollectable, Is.EqualTo(expectedInfo.IsCollectable));
+					if (entityInfo.Type == EntityType.Bot)
+						Assert.That(((BotInfo)entityInfo).Direction, Is.EqualTo(((BotInfo)expectedInfo).Direction));
+				}
+			}
+		}
+
 		private static IEntity CreateEntity(EntityInfo entityInfo)
 		{
 			var entity = entityInfo.Type == EntityType.Bot ? Substitute.For<IBot>() : Substitute.For<IEntity>();
@@ -949,9 +1043,6 @@ namespace botworld.bl.tests
 				((IBot)entity).Direction.Returns(((BotInfo)entityInfo).Direction);
 			return entity;
 		}
-
-		//GetNeighborsInfo
-		//границы
 
 		//ExploreNeighborCell
 		//свой-чужой
