@@ -133,14 +133,14 @@ namespace botworld.bl
 		private IEnumerable<EntityInfo> GetEntitiesInfo(Location location)
 		{
 			EnsureLocationIsInRange(location);
-			return GetEntities(location).Select(e => e is IBot ? ((IBot)e).PrepareBotInfo() : e.PrepareEntityInfo());
+			return GetEntities(location).Select(e => e.PrepareEntityInfo());
 		}
 
 		private IEnumerable<EntityInfo> GetEntitiesInfo(IBot bot)
 		{
 			EnsureIsHostedEntity(bot);
 			var location = bot.Location;
-			return GetEntities(location).Where(e => e!= bot).Select(e => e is IBot ? ((IBot)e).PrepareBotInfo() : e.PrepareEntityInfo());
+			return GetEntities(location).Where(e => e!= bot).Select(e => e.PrepareEntityInfo());
 		}
 
 		public Dictionary<Location, IEnumerable<EntityInfo>> GetNeighborsInfo(IBot bot)
