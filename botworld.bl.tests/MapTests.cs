@@ -1044,13 +1044,102 @@ namespace botworld.bl.tests
 			return entity;
 		}
 
-		//ExploreNeighborCell
-		//свой-чужой
-		//заграница
-		//пометка исследованных
-		//информация о клетке
-		//боты и не боты
-		//много всяких
-		//границы
+		[Test]
+		public void ExploreNeighborCell_ForSomeBotDirection_MarksCorrespondingCellAsExplored()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(2, 4));
+			bot.Direction.Returns(Direction.South);
+			map.Add(bot);
+
+			map.ExploreNeighborCell(bot);
+
+			Assert.That(map.IsExplored(bot, new Location(2, 5)), Is.True);
+			Assert.That(map.IsExplored(bot, new Location(2, 3)), Is.False);
+			Assert.That(map.IsExplored(bot, new Location(1, 4)), Is.False);
+			Assert.That(map.IsExplored(bot, new Location(3, 4)), Is.False);
+		}
+
+		[Test]
+		public void ExploreNeighborCell_ForSomeBotDirection_ReturnsExpectedInfoAboutThisLocations()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(2, 4));
+			bot.Direction.Returns(Direction.West);
+			map.Add(bot);
+			var location = new Location(1, 4);
+			var expectedInfos = new List<EntityInfo> {new EntityInfo(EntityType.Gem, 10, 10, 10, location, true, true), new BotInfo(10, 10, 10, location, Direction.North )};
+
+			foreach (var entity in expectedInfos.Select(CreateEntity))
+				map.Add(entity);
+
+			var info = map.ExploreNeighborCell(bot).ToArray();
+
+			Assert.That(info.Length, Is.EqualTo(expectedInfos.Count));
+			for (var i = 0; i < info.Length; i++)
+			{
+				var entityInfo = info[i];
+				var expectedInfo = expectedInfos[i];
+				Assert.That(entityInfo.Type, Is.EqualTo(expectedInfo.Type));
+				Assert.That(entityInfo.HP, Is.EqualTo(expectedInfo.HP));
+				Assert.That(entityInfo.AttackStrength, Is.EqualTo(expectedInfo.AttackStrength));
+				Assert.That(entityInfo.DefenceStrength, Is.EqualTo(expectedInfo.DefenceStrength));
+				Assert.That(entityInfo.Location, Is.EqualTo(expectedInfo.Location));
+				Assert.That(entityInfo.CanShareCell, Is.EqualTo(expectedInfo.CanShareCell));
+				Assert.That(entityInfo.IsCollectable, Is.EqualTo(expectedInfo.IsCollectable));
+				if (entityInfo.Type == EntityType.Bot)
+					Assert.That(((BotInfo)entityInfo).Direction, Is.EqualTo(((BotInfo)expectedInfo).Direction));
+			}
+		}
+
+		[Test]
+		public void ExploreNeighborCell_ForBot_DontMarkCorrespondingCellAsExploredForOtherBots()
+		{
+			var map = new Map(10, 20);
+			var bot1 = Substitute.For<IBot>();
+			bot1.Location.Returns(new Location(2, 4));
+			bot1.Direction.Returns(Direction.South);
+			map.Add(bot1);
+			var bot2 = Substitute.For<IBot>();
+			bot2.Location.Returns(new Location(2, 6));
+			bot2.Direction.Returns(Direction.North);
+			map.Add(bot2);
+			var location = new Location(2, 5);
+
+			map.ExploreNeighborCell(bot1);
+
+			Assert.That(map.IsExplored(bot1, location), Is.True);
+			Assert.That(map.IsExplored(bot2, location), Is.False);
+		}
+
+		[Test]
+		public void ExploreNeighborCell_ForBotLocatedAtBoundaryAndDirectedOutOfMap_ThrowException()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(0, 4));
+			bot.Direction.Returns(Direction.West);
+			map.Add(bot);
+
+			var action = new TestDelegate(() => map.ExploreNeighborCell(bot));
+
+			Assert.Throws<IndexOutOfRangeException>(action);
+		}
+
+		[Test]
+		public void ExploreNeighborCell_ForBotLocatedAtBoundaryAndDirectedAlongBoundary_MarksCorrespondingCellAsExplored()
+		{
+			var map = new Map(10, 20);
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(8, 19));
+			bot.Direction.Returns(Direction.East);
+			map.Add(bot);
+
+			map.ExploreNeighborCell(bot);
+
+			Assert.That(map.IsExplored(bot, new Location(9, 19)), Is.True);
+		}
 	}
 }
