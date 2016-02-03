@@ -77,6 +77,7 @@ namespace botworld.bl.tests
 			Assert.That(entityInfo.HP, Is.EqualTo(1));
 			Assert.That(entityInfo.AttackStrength, Is.EqualTo(0));
 			Assert.That(entityInfo.DefenceStrength, Is.EqualTo(0));
+			Assert.That(entityInfo.WP, Is.EqualTo(100));
 		}
 
 		[Test]
