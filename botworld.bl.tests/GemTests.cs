@@ -14,11 +14,11 @@ namespace botworld.bl.tests
 		}
 
 		[Test]
-		public void Points_Returns_PointsSetByConstructor()
+		public void WP_Returns_PointsSetByConstructor()
 		{
 			var gem = new Gem(100, new Location(2, 4));
 
-			Assert.That(gem.Points, Is.EqualTo(100));
+			Assert.That(gem.WP, Is.EqualTo(100));
 		}
 
 		[Test]
