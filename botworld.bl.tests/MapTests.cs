@@ -929,6 +929,7 @@ namespace botworld.bl.tests
 					Assert.That(entityInfo.Location, Is.EqualTo(expectedInfo.Location));
 					Assert.That(entityInfo.CanShareCell, Is.EqualTo(expectedInfo.CanShareCell));
 					Assert.That(entityInfo.IsCollectable, Is.EqualTo(expectedInfo.IsCollectable));
+					Assert.That(entityInfo.WP, Is.EqualTo(expectedInfo.WP));
 					if (entityInfo.Type == EntityType.Bot)
 						Assert.That(((BotInfo)entityInfo).Direction, Is.EqualTo(((BotInfo)expectedInfo).Direction));
 				}
@@ -976,6 +977,7 @@ namespace botworld.bl.tests
 					Assert.That(entityInfo.Location, Is.EqualTo(expectedInfo.Location));
 					Assert.That(entityInfo.CanShareCell, Is.EqualTo(expectedInfo.CanShareCell));
 					Assert.That(entityInfo.IsCollectable, Is.EqualTo(expectedInfo.IsCollectable));
+					Assert.That(entityInfo.WP, Is.EqualTo(expectedInfo.WP));
 					if (entityInfo.Type == EntityType.Bot)
 						Assert.That(((BotInfo)entityInfo).Direction, Is.EqualTo(((BotInfo)expectedInfo).Direction));
 				}
@@ -1023,6 +1025,7 @@ namespace botworld.bl.tests
 					Assert.That(entityInfo.Location, Is.EqualTo(expectedInfo.Location));
 					Assert.That(entityInfo.CanShareCell, Is.EqualTo(expectedInfo.CanShareCell));
 					Assert.That(entityInfo.IsCollectable, Is.EqualTo(expectedInfo.IsCollectable));
+					Assert.That(entityInfo.WP, Is.EqualTo(expectedInfo.WP));
 					if (entityInfo.Type == EntityType.Bot)
 						Assert.That(((BotInfo)entityInfo).Direction, Is.EqualTo(((BotInfo)expectedInfo).Direction));
 				}
@@ -1031,7 +1034,7 @@ namespace botworld.bl.tests
 
 		private static IEntity CreateEntity(EntityInfo entityInfo)
 		{
-			var entity = entityInfo.Type == EntityType.Bot ? Substitute.For<IBot>() : Substitute.For<IEntity>();
+			var entity = entityInfo.Type == EntityType.Bot ? Substitute.For<IBot>() : entityInfo.WP != 0 ? Substitute.For<IEntity, IPointsProvider>() : Substitute.For<IEntity>();
 			entity.Type.Returns(entityInfo.Type);
 			entity.HP.Returns(entityInfo.HP);
 			entity.AttackStrength.Returns(entityInfo.AttackStrength);
@@ -1040,7 +1043,12 @@ namespace botworld.bl.tests
 			entity.CanShareCell.Returns(entityInfo.CanShareCell);
 			entity.IsCollectable.Returns(entityInfo.IsCollectable);
 			if (entityInfo.Type == EntityType.Bot)
+			{
+				((IBot)entity).WP.Returns(entityInfo.WP);
 				((IBot)entity).Direction.Returns(((BotInfo)entityInfo).Direction);
+			}
+			else if (entityInfo.WP != 0)
+				((IPointsProvider)entity).WP.Returns(entityInfo.WP);
 			return entity;
 		}
 
@@ -1089,6 +1097,7 @@ namespace botworld.bl.tests
 				Assert.That(entityInfo.Location, Is.EqualTo(expectedInfo.Location));
 				Assert.That(entityInfo.CanShareCell, Is.EqualTo(expectedInfo.CanShareCell));
 				Assert.That(entityInfo.IsCollectable, Is.EqualTo(expectedInfo.IsCollectable));
+				Assert.That(entityInfo.WP, Is.EqualTo(expectedInfo.WP));
 				if (entityInfo.Type == EntityType.Bot)
 					Assert.That(((BotInfo)entityInfo).Direction, Is.EqualTo(((BotInfo)expectedInfo).Direction));
 			}

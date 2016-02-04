@@ -67,6 +67,10 @@ namespace botworld.bl
 		{
 		}
 
+		public void OnWPChange(int previousWP, int newWP)
+		{
+		}
+
 		private void EnqueueTurnCommands(Direction direction, ConsoleKeyInfo keyPressed)
 		{
 			var desiredDirection = keyToDirection[keyPressed.Key];

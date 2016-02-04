@@ -57,6 +57,48 @@ namespace botworld.bl.tests
 		}
 
 		[Test]
+		public void WP_ForNewBot_ReturnsZero()
+		{
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.South, null);
+
+			Assert.That(bot.WP, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void UpdateWP_ChangesBotWP()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+
+			var wp = bot.UpdateWP(10);
+
+			Assert.That(bot.WP, Is.EqualTo(10));
+			Assert.That(bot.WP, Is.EqualTo(wp));
+		}
+
+		[Test]
+		public void UpdateWP_ForNonZeroChange_ResultsInBotIntelligenceNotification()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+
+			bot.UpdateWP(10);
+
+			botIntelligence.Received(1).OnWPChange(0, 10);
+		}
+
+		[Test]
+		public void UpdateWP_ForZeroChange_NotResultsInBotIntelligenceNotification()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+
+			bot.UpdateWP(0);
+
+			botIntelligence.DidNotReceive().OnWPChange(Arg.Any<int>(), Arg.Any<int>());
+		}
+
+		[Test]
 		public void UpdateLocation_SetsPassedLocation()
 		{
 			var botIntelligence = Substitute.For<IBotIntelligence>();
@@ -142,7 +184,9 @@ namespace botworld.bl.tests
 		[Test]
 		public void PrepareEntityInfo_Returns_ProperInfo()
 		{
-			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, null);
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+			bot.UpdateWP(10);
 
 			var entityInfo = bot.PrepareEntityInfo();
 
@@ -154,12 +198,15 @@ namespace botworld.bl.tests
 			Assert.That(entityInfo.HP, Is.EqualTo(100));
 			Assert.That(entityInfo.AttackStrength, Is.EqualTo(5));
 			Assert.That(entityInfo.DefenceStrength, Is.EqualTo(3));
+			Assert.That(entityInfo.WP, Is.EqualTo(10));
 		}
 
 		[Test]
 		public void PrepareBotInfo_Returns_ProperInfo()
 		{
-			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, null);
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+			bot.UpdateWP(10);
 
 			var botInfo = bot.PrepareBotInfo();
 
@@ -171,6 +218,7 @@ namespace botworld.bl.tests
 			Assert.That(botInfo.HP, Is.EqualTo(100));
 			Assert.That(botInfo.AttackStrength, Is.EqualTo(5));
 			Assert.That(botInfo.DefenceStrength, Is.EqualTo(3));
+			Assert.That(botInfo.WP, Is.EqualTo(10));
 			Assert.That(botInfo.Direction, Is.EqualTo(Direction.North));
 		}
 

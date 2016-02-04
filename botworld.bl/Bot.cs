@@ -12,6 +12,7 @@
 			DefenceStrength = defenceStrength;
 			Location = location;
 			Direction = direction;
+			WP = 0;
 			this.botIntelligence = botIntelligence;
 		}
 		
@@ -23,6 +24,8 @@
 		}
 
 		public double HP { get; private set; }
+
+		public int WP { get; private set; }
 
 		public double AttackStrength { get; private set; }
 
@@ -74,6 +77,15 @@
 			Direction = direction;
 			if (Direction != previousDirection)
 				botIntelligence.OnRotation(previousDirection, Direction);
+		}
+
+		public int UpdateWP(int wpDiff)
+		{
+			var previousWP = WP;
+			WP += wpDiff;
+			if (WP != previousWP)
+				botIntelligence.OnWPChange(previousWP, WP);
+			return WP;
 		}
 
 		public void UpdateLocation(Location location)
