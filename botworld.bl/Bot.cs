@@ -1,4 +1,6 @@
-﻿namespace botworld.bl
+﻿using System.Collections.Generic;
+
+namespace botworld.bl
 {
 	public class Bot : IBot
 	{
@@ -96,9 +98,9 @@
 				botIntelligence.OnMove(previousLocation, Location);
 		}
 
-		public BotAction ChooseNextAction()
+		public BotAction ChooseNextAction(Dictionary<Location, IEnumerable<EntityInfo>> neighborsInfo)
 		{
-			return botIntelligence.ChooseNextAction(this.PrepareBotInfo());
+			return botIntelligence.ChooseNextAction(this.PrepareBotInfo(), neighborsInfo);
 		}
 	}
 }

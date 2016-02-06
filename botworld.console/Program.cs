@@ -14,7 +14,7 @@ namespace botworld.console
 			BotAction nextAction;
 			do
 			{
-				nextAction = bot.ChooseNextAction();
+				nextAction = bot.ChooseNextAction(null);
 				Console.WriteLine("Next command: \"{0}\"", nextAction);
 				var newDirection = (int)bot.Direction;
 				if (nextAction == BotAction.TurnLeft || nextAction == BotAction.TurnRight)

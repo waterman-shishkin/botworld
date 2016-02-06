@@ -1,4 +1,6 @@
-﻿namespace botworld.bl
+﻿using System.Collections.Generic;
+
+namespace botworld.bl
 {
 	public interface IBot : IEntity
 	{
@@ -7,6 +9,6 @@
 		void UpdateDirection(Direction direction);
 		void UpdateLocation(Location location);
 		int UpdateWP(int wpDiff);
-		BotAction ChooseNextAction();
+		BotAction ChooseNextAction(Dictionary<Location, IEnumerable<EntityInfo>> neighborsInfo);
 	}
 }

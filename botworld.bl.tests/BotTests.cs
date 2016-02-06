@@ -283,13 +283,13 @@ namespace botworld.bl.tests
 		public void ChooseNextAction_Always_ReturnsActionsReturnedByBotIntelligence()
 		{
 			var botIntelligence = Substitute.For<IBotIntelligence>();
-			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>()).Returns(BotAction.TurnLeft, BotAction.Step, BotAction.TurnRight, BotAction.Act, BotAction.Explore, BotAction.Collect, BotAction.None);
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).Returns(BotAction.TurnLeft, BotAction.Step, BotAction.TurnRight, BotAction.Act, BotAction.Explore, BotAction.Collect, BotAction.None);
 			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
 
 			var expectedActions = new[] { BotAction.TurnLeft, BotAction.Step, BotAction.TurnRight, BotAction.Act, BotAction.Explore, BotAction.Collect, BotAction.None };
 			var actions = new List<BotAction>();
 			for (var i = 0; i < expectedActions.Length; i++)
-				actions.Add(bot.ChooseNextAction());
+				actions.Add(bot.ChooseNextAction(null));
 
 			Assert.That(actions.ToArray(), Is.EqualTo(expectedActions));
 		}

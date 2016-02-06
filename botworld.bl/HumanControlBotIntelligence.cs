@@ -21,7 +21,7 @@ namespace botworld.bl
 			this.keysSource = keysSource;
 		}
 
-		public BotAction ChooseNextAction(BotInfo botInfo)
+		public BotAction ChooseNextAction(BotInfo botInfo, Dictionary<Location, IEnumerable<EntityInfo>> neighborsInfo)
 		{
 			if (actionsQueue.Any())
 				return actionsQueue.Dequeue();
