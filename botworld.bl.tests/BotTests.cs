@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -54,6 +55,68 @@ namespace botworld.bl.tests
 			bot.UpdateDirection(Direction.North);
 
 			botIntelligence.DidNotReceive().OnRotation(Arg.Any<Direction>(), Arg.Any<Direction>());
+		}
+
+		[Test]
+		public void CollectedEntities_ForNewBot_ReturnsEmptyCollection()
+		{
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, null);
+
+			Assert.That(bot.CollectedEntities, Is.Empty);
+		}
+
+		[Test]
+		public void CollectedEntities_AfterCollectingSomeEntities_ReturnsCollectionOfThoseEntities()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+			var entity1 = Substitute.For<IEntity>();
+			entity1.IsCollectable.Returns(true);
+			var entity2 = Substitute.For<IEntity>();
+			entity2.IsCollectable.Returns(true);
+
+			bot.Collect(entity1);
+			bot.Collect(entity2);
+
+			Assert.That(bot.CollectedEntities, Is.EqualTo(new [] { entity1, entity2 }));
+		}
+
+		[Test]
+		public void Collect_OfSomeEntity_ResultsInBotIntelligenceNotification()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+			var entity = Substitute.For<IEntity>();
+			entity.IsCollectable.Returns(true);
+
+			bot.Collect(entity);
+
+			botIntelligence.Received(1).OnCollect(Arg.Any<EntityInfo>());
+		}
+
+		[Test]
+		public void Collect_OfNonCollectableEntity_ThrowException()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+			var entity = Substitute.For<IEntity>();
+			entity.IsCollectable.Returns(false);
+
+			var action = new TestDelegate(() => bot.Collect(entity));
+
+			Assert.Throws<InvalidOperationException>(action);
+		}
+
+		[Test]
+		public void OnExplore_ResultsInBotIntelligenceNotification()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 3, new Location(2, 4), Direction.North, botIntelligence);
+			var info = new[] { new EntityInfo(EntityType.Gem, 1, 0, 0, new Location(2, 4), true, true, 100), new EntityInfo(EntityType.Mine, 1, 100, 0, new Location(2, 4), true, false, 0) };
+
+			bot.OnExplore(info);
+
+			botIntelligence.Received(1).OnExplore(info);
 		}
 
 		[Test]

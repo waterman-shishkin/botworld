@@ -71,6 +71,14 @@ namespace botworld.bl
 		{
 		}
 
+		public void OnCollect(EntityInfo entityInfo)
+		{
+		}
+
+		public void OnExplore(IEnumerable<EntityInfo> info)
+		{
+		}
+
 		private void EnqueueTurnCommands(Direction direction, ConsoleKeyInfo keyPressed)
 		{
 			var desiredDirection = keyToDirection[keyPressed.Key];

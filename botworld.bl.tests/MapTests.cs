@@ -73,6 +73,7 @@ namespace botworld.bl.tests
 			map.Add(bot);
 
 			Assert.That(map.GetEntities(location).Single(), Is.EqualTo(bot));
+			bot.Received(1).OnExplore(Arg.Any<IEnumerable<EntityInfo>>());
 		}
 
 		[Test]
@@ -145,6 +146,7 @@ namespace botworld.bl.tests
 			map.Add(bot);
 
 			Assert.That(map.GetEntities(location), Is.EqualTo(new [] { entity, bot }));
+			bot.Received(1).OnExplore(Arg.Any<IEnumerable<EntityInfo>>());
 		}
 
 		[Test]
@@ -1101,6 +1103,7 @@ namespace botworld.bl.tests
 				if (entityInfo.Type == EntityType.Bot)
 					Assert.That(((BotInfo)entityInfo).Direction, Is.EqualTo(((BotInfo)expectedInfo).Direction));
 			}
+			bot.Received(2).OnExplore(Arg.Any<IEnumerable<EntityInfo>>());
 		}
 
 		[Test]

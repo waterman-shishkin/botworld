@@ -127,7 +127,9 @@ namespace botworld.bl
 			EnsureIsHostedEntity(bot);
 			EnsureLocationIsInRange(location);
 			GetCell(location).VisitorsIds.Add(botIds[bot]);
-			return GetEntitiesInfo(location);
+			var info = GetEntitiesInfo(location).ToArray();
+			bot.OnExplore(info);
+			return info;
 		}
 
 		private IEnumerable<EntityInfo> GetEntitiesInfo(Location location)

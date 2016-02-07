@@ -11,5 +11,7 @@ namespace botworld.bl
 		void OnRotation(Direction previousDirection, Direction newDirection);
 		void OnMove(Location previousLocation, Location newLocation);
 		void OnWPChange(int previousWP, int newWP);
+		void OnCollect(EntityInfo entityInfo);
+		void OnExplore(IEnumerable<EntityInfo> info);
 	}
 }

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace botworld.bl
 {
 	public class Bot : IBot
 	{
 		private readonly IBotIntelligence botIntelligence;
+		private readonly List<IEntity> collectedEntities = new List<IEntity>();
 
 		public Bot(string name, double hp, double attackStrength, double defenceStrength, Location location, Direction direction, IBotIntelligence botIntelligence)
 		{
@@ -73,6 +75,11 @@ namespace botworld.bl
 
 		public Direction Direction { get; private set; }
 
+		public IEnumerable<IEntity> CollectedEntities
+		{
+			get { return collectedEntities.AsReadOnly(); }
+		}
+
 		public void UpdateDirection(Direction direction)
 		{
 			var previousDirection = Direction;
@@ -101,6 +108,20 @@ namespace botworld.bl
 		public BotAction ChooseNextAction(Dictionary<Location, IEnumerable<EntityInfo>> neighborsInfo)
 		{
 			return botIntelligence.ChooseNextAction(this.PrepareBotInfo(), neighborsInfo);
+		}
+
+		public void Collect(IEntity entity)
+		{
+			if (!entity.IsCollectable)
+				throw new InvalidOperationException(string.Format("The entity {0} is not collectable", entity));
+
+			collectedEntities.Add(entity);
+			botIntelligence.OnCollect(entity.PrepareEntityInfo());
+		}
+
+		public void OnExplore(IEnumerable<EntityInfo> info)
+		{
+			botIntelligence.OnExplore(info);
 		}
 	}
 }
