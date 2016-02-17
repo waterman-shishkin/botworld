@@ -35,9 +35,8 @@ namespace botworld.bl.tests
 		{
 			var bot = Substitute.For<IBot>();
 			bot.IsDead.Returns(true);
-			var bots = new [] {bot};
 			var map = Substitute.For<IMap>();
-			map.GetBots().Returns(bots);
+			map.GetBots().Returns(new[] { bot });
 			var scenario = Substitute.For<IGameScenario>();
 			var game = new Game(map, scenario);
 
@@ -46,18 +45,86 @@ namespace botworld.bl.tests
 			bot.Received(0).ChooseNextAction(Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>());
 		}
 
-		// если бот умер, то него очередь уже не доходит (один бот убил другого бота)
-		// TurnLeft - разворот бота
-		// TurnRight - разворот бота
-		// TurnStep - простое перемещение бота
-		// TurnStep - попытка переместиться за границу
-		// TurnStep - перемещение на клетку, куда можно встать без боя
-		// TurnStep - перемещение на клетку, куда можно встать с боем
-		// TurnStep - перемещение на клетку, куда можно встать с боем, но погибаем
-		// TurnStep - перемещение на клетку, куда нельзя встать
-		// TurnStep - перемещение на клетку, куда нельзя встать и погибаем
-		// TurnStep - перемещение на клетку, куда нельзя встать, но после боя становится можно
-		// TurnStep - перемещение на клетку, куда нельзя встать, но после боя становится можно, но погибаем
+		[Test]
+		public void Tick_ForBotWhichDesireToTurnLeft_AskMapToRotateBot()
+		{
+			var bot = Substitute.For<IBot>();
+			var location = new Location(2, 4);
+			bot.Location.Returns(location);
+			bot.Direction.Returns(Direction.North);
+			bot.ChooseNextAction(Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.TurnLeft);
+			var map = Substitute.For<IMap>();
+			map.GetBots().Returns(new[] { bot });
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			map.Received(1).MoveBot(bot, location, Direction.West);
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToTurnRight_AskMapToRotateBot()
+		{
+			var bot = Substitute.For<IBot>();
+			var location = new Location(2, 4);
+			bot.Location.Returns(location);
+			bot.Direction.Returns(Direction.North);
+			bot.ChooseNextAction(Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.TurnRight);
+			var map = Substitute.For<IMap>();
+			map.GetBots().Returns(new[] { bot });
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			map.Received(1).MoveBot(bot, location, Direction.East);
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToMakeStep_AskMapToMoveBot()
+		{
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(2, 4));
+			bot.Direction.Returns(Direction.North);
+			bot.ChooseNextAction(Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Step);
+			var map = Substitute.For<IMap>();
+			map.GetBots().Returns(new[] { bot });
+			map.IsInRange(Arg.Any<Location>()).Returns(true);
+			map.CanMoveBot(Arg.Any<IBot>(), Arg.Any<Location>()).Returns(true);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			map.Received(1).MoveBot(bot, new Location(2, 3), Direction.North);
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToMakeStepOutOfMapRange_DoNothing()
+		{
+			var bot = Substitute.For<IBot>();
+			bot.Location.Returns(new Location(0, 4));
+			bot.Direction.Returns(Direction.West);
+			bot.ChooseNextAction(Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Step);
+			var map = Substitute.For<IMap>();
+			map.GetBots().Returns(new[] { bot });
+			map.IsInRange(Arg.Any<Location>()).Returns(false);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			map.Received(0).MoveBot(bot, Arg.Any<Location>(), Arg.Any<Direction>());
+		}
+
+		// Step - перемещение на клетку, куда можно встать без боя
+		// Step - перемещение на клетку, куда можно встать с боем
+		// Step - перемещение на клетку, куда можно встать с боем, но погибаем
+		// Step - перемещение на клетку, куда нельзя встать
+		// Step - перемещение на клетку, куда нельзя встать и погибаем
+		// Step - перемещение на клетку, куда нельзя встать, но после боя становится можно
+		// Step - перемещение на клетку, куда нельзя встать, но после боя становится можно, но погибаем
 		// Act - атака на пустую клетку
 		// Act - атака на клетку за границей
 		// Act - атака на клетку, где не отвечают на атаку
