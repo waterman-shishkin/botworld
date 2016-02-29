@@ -112,13 +112,161 @@ namespace botworld.bl.tests
 			Assert.That(bot.Location, Is.EqualTo(targetLocation));
 		}
 
-		// До бота, который умер в процессе, очередь не доходит
-		// Step - перемещение на клетку, куда можно встать с боем (мина, бот)
-		// Step - перемещение на клетку, куда можно встать с боем, но погибаем
-		// Step - перемещение на клетку, куда нельзя встать
-		// Step - перемещение на клетку, куда нельзя встать и погибаем
-		// Step - перемещение на клетку, куда нельзя встать, но после боя становится можно
-		// Step - перемещение на клетку, куда нельзя встать, но после боя становится можно, но погибаем
+		[Test]
+		public void Tick_ForBotWhichDesireToMakeStepToCellOccupiedByAgressiveBot_ResultsInBotDamageAndMovement()
+		{
+			var guestBotIntelligence = Substitute.For<IBotIntelligence>();
+			guestBotIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Step);
+			var guestBot = new Bot("Guest", 20, 10, 0, 5, new Location(2, 4), Direction.North, guestBotIntelligence);
+			var targetLocation = new Location(2, 3);
+			var hostBotIntelligence = Substitute.For<IBotIntelligence>();
+			hostBotIntelligence.ChooseInvasionResponseAction(Arg.Any<BotInfo>(), Arg.Any<EntityInfo>()).ReturnsForAnyArgs(InvasionResponseAction.Attack);
+			var hostBot = new Bot("Host", 20, 10, 0, 5, targetLocation, Direction.North, hostBotIntelligence);
+			var map = new Map(10, 20);
+			map.Add(guestBot);
+			map.Add(hostBot);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(guestBot.HP, Is.EqualTo(15));
+			Assert.That(guestBot.Location, Is.EqualTo(targetLocation));
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToMakeStepToCellOccupiedByStrongMine_ResultsInMineDestroyAndBotDeath()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Step);
+			var location = new Location(2, 4);
+			var bot = new Bot("Bot", 20, 10, 0, 5, location, Direction.North, botIntelligence);
+			var mine = new Mine(100, new Location(2, 3));
+			var map = new Map(10, 20);
+			map.Add(bot);
+			map.Add(mine);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(mine.IsDead, Is.True);
+			Assert.That(bot.IsDead, Is.True);
+			Assert.That(bot.Location, Is.EqualTo(location));
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToMakeStepToCellOccupiedByStrongAgressiveBot_ResultsInBotDeath()
+		{
+			var guestBotIntelligence = Substitute.For<IBotIntelligence>();
+			guestBotIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Step);
+			var location = new Location(2, 4);
+			var guestBot = new Bot("Guest", 3, 10, 0, 5, location, Direction.North, guestBotIntelligence);
+			var hostBotIntelligence = Substitute.For<IBotIntelligence>();
+			hostBotIntelligence.ChooseInvasionResponseAction(Arg.Any<BotInfo>(), Arg.Any<EntityInfo>()).ReturnsForAnyArgs(InvasionResponseAction.Attack);
+			var hostBot = new Bot("Host", 20, 10, 0, 5, new Location(2, 3), Direction.North, hostBotIntelligence);
+			var map = new Map(10, 20);
+			map.Add(guestBot);
+			map.Add(hostBot);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(guestBot.IsDead, Is.True);
+			Assert.That(guestBot.Location, Is.EqualTo(location));
+		}
+
+		[Test]
+		public void Tick_ForStrongBotWhichDesireToMakeStepToCellOccupiedByWeakAgressiveBot_ResultsInGuestBotDamageAndMovementAndHostBotDeath()
+		{
+			var guestBotIntelligence = Substitute.For<IBotIntelligence>();
+			guestBotIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Step);
+			guestBotIntelligence.ChooseAttackResponseAction(Arg.Any<BotInfo>(), Arg.Any<EntityInfo>()).ReturnsForAnyArgs(AttackResponseAction.Attack);
+			var guestBot = new Bot("Guest", 20, 100, 0, 5, new Location(2, 4), Direction.North, guestBotIntelligence);
+			var hostBotIntelligence = Substitute.For<IBotIntelligence>();
+			hostBotIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Step);
+			hostBotIntelligence.ChooseInvasionResponseAction(Arg.Any<BotInfo>(), Arg.Any<EntityInfo>()).ReturnsForAnyArgs(InvasionResponseAction.Attack);
+			var targetLocation = new Location(2, 3);
+			var hostBot = new Bot("Host", 20, 10, 0, 5, targetLocation, Direction.North, hostBotIntelligence);
+			var map = new Map(10, 20);
+			map.Add(guestBot);
+			map.Add(hostBot);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(hostBot.IsDead, Is.True);
+			Assert.That(hostBot.Location, Is.EqualTo(targetLocation));
+			Assert.That(guestBot.HP, Is.EqualTo(15));
+			Assert.That(guestBot.Location, Is.EqualTo(targetLocation));
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToMakeStepToCellOccupiedByWall_ResultsInBotDamage()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Step);
+			var location = new Location(2, 4);
+			var bot = new Bot("Bot", 20, 10, 0, 5, location, Direction.North, botIntelligence);
+			var wall = new Wall(100, 20, 10, new Location(2, 3));
+			var map = new Map(10, 20);
+			map.Add(bot);
+			map.Add(wall);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(wall.HP, Is.EqualTo(100));
+			Assert.That(bot.HP, Is.EqualTo(5));
+			Assert.That(bot.Location, Is.EqualTo(location));
+		}
+
+		[Test]
+		public void Tick_ForWeakBotWhichDesireToMakeStepToCellOccupiedByWall_ResultsInBotDeath()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Step);
+			var location = new Location(2, 4);
+			var bot = new Bot("Bot", 10, 10, 0, 5, location, Direction.North, botIntelligence);
+			var wall = new Wall(100, 20, 10, new Location(2, 3));
+			var map = new Map(10, 20);
+			map.Add(bot);
+			map.Add(wall);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(wall.HP, Is.EqualTo(100));
+			Assert.That(bot.IsDead, Is.True);
+			Assert.That(bot.Location, Is.EqualTo(location));
+		}
+
+		[Test]
+		public void Tick_ForStrongAgressiveBotWhichDesireToMakeStepToCellOccupiedByWall_ResultsInBotDamageAndMovementAndWallDestroy()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Step);
+			botIntelligence.ChooseAttackResponseAction(Arg.Any<BotInfo>(), Arg.Any<EntityInfo>()).ReturnsForAnyArgs(AttackResponseAction.Attack);
+			var bot = new Bot("Bot", 20, 100, 0, 5, new Location(2, 4), Direction.North, botIntelligence);
+			var targetLocation = new Location(2, 3);
+			var wall = new Wall(10, 20, 10, targetLocation);
+			var map = new Map(10, 20);
+			map.Add(bot);
+			map.Add(wall);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(wall.IsDead, Is.True);
+			Assert.That(bot.HP, Is.EqualTo(5));
+			Assert.That(bot.Location, Is.EqualTo(targetLocation));
+		}
+
 		// Act - атака на пустую клетку
 		// Act - атака на клетку за границей
 		// Act - атака на клетку, где не отвечают на атаку
