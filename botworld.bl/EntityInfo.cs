@@ -2,11 +2,12 @@
 {
 	public class EntityInfo
 	{
-		public EntityInfo(EntityType type, double hp, double attackStrength, double defenceStrength, Location location, bool canShareCell, bool isCollectable, int wp)
+		public EntityInfo(EntityType type, double hp, double attackStrength, double autoDamageStrength, double defenceStrength, Location location, bool canShareCell, bool isCollectable, int wp)
 		{
 			Type = type;
 			HP = hp;
 			AttackStrength = attackStrength;
+			AutoDamageStrength = autoDamageStrength;
 			DefenceStrength = defenceStrength;
 			Location = location;
 			CanShareCell = canShareCell;
@@ -20,6 +21,7 @@
 		public bool IsCollectable { get; private set; }
 		public double HP { get; private set; }
 		public double AttackStrength { get; private set; }
+		public double AutoDamageStrength { get; private set; }
 		public double DefenceStrength { get; private set; }
 		public int WP { get; private set; }
 

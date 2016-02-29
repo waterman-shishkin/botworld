@@ -23,11 +23,11 @@ namespace botworld.bl.tests
 		}
 
 		[Test]
-		public void CanShareCell_Returns_True()
+		public void CanShareCell_Returns_False()
 		{
 			var mine = new Mine(100, new Location(2, 4));
 
-			Assert.That(mine.CanShareCell, Is.True);
+			Assert.That(mine.CanShareCell, Is.False);
 		}
 
 		[Test]
@@ -44,6 +44,14 @@ namespace botworld.bl.tests
 			var mine = new Mine(100, new Location(2, 4));
 
 			Assert.That(mine.AttackStrength, Is.EqualTo(100));
+		}
+
+		[Test]
+		public void AutoDamageStrength_Returns_Unity()
+		{
+			var mine = new Mine(100, new Location(2, 4));
+
+			Assert.That(mine.AutoDamageStrength, Is.EqualTo(1));
 		}
 
 		[Test]
@@ -64,10 +72,11 @@ namespace botworld.bl.tests
 			Assert.That(entityInfo.Type, Is.EqualTo(EntityType.Mine));
 			Assert.That(entityInfo.Location.X, Is.EqualTo(2));
 			Assert.That(entityInfo.Location.Y, Is.EqualTo(4));
-			Assert.That(entityInfo.CanShareCell, Is.True);
+			Assert.That(entityInfo.CanShareCell, Is.False);
 			Assert.That(entityInfo.IsCollectable, Is.False);
 			Assert.That(entityInfo.HP, Is.EqualTo(1));
 			Assert.That(entityInfo.AttackStrength, Is.EqualTo(100));
+			Assert.That(entityInfo.AutoDamageStrength, Is.EqualTo(1));
 			Assert.That(entityInfo.DefenceStrength, Is.EqualTo(0));
 		}
 

@@ -55,6 +55,14 @@ namespace botworld.bl.tests
 		}
 
 		[Test]
+		public void AutoDamageStrength_Returns_Zero()
+		{
+			var wall = new Wall(100, 10, 10, new Location(2, 4));
+
+			Assert.That(wall.AutoDamageStrength, Is.EqualTo(0));
+		}
+
+		[Test]
 		public void DefenceStrength_Returns_DefenceStrengthSetByConstructor()
 		{
 			var wall = new Wall(100, 10, 10, new Location(2, 4));
@@ -76,6 +84,7 @@ namespace botworld.bl.tests
 			Assert.That(entityInfo.IsCollectable, Is.False);
 			Assert.That(entityInfo.HP, Is.EqualTo(100));
 			Assert.That(entityInfo.AttackStrength, Is.EqualTo(10));
+			Assert.That(entityInfo.AutoDamageStrength, Is.EqualTo(0));
 			Assert.That(entityInfo.DefenceStrength, Is.EqualTo(10));
 		}
 

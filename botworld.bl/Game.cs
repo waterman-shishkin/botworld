@@ -92,6 +92,11 @@ namespace botworld.bl
 				defender.ImpactDamage(damage);
 			if (defender.IsDead)
 				Map.Remove(defender);
+			var autoDamage = aggressor.AutoDamageStrength;
+			if (autoDamage > 0)
+				aggressor.ImpactDamage(autoDamage);
+			if (aggressor.IsDead)
+				Map.Remove(aggressor);
 		}
 
 		private void ProceedStepAction(IBot bot)

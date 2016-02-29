@@ -18,7 +18,7 @@ namespace botworld.bl
 
 		public bool CanShareCell
 		{
-			get { return true; }
+			get { return false; }
 		}
 
 		public bool IsCollectable
@@ -34,6 +34,8 @@ namespace botworld.bl
 		public double HP { get; private set; }
 
 		public double AttackStrength { get; private set; }
+
+		public double AutoDamageStrength { get { return 1; } }
 
 		public double DefenceStrength { get { return 0; } }
 

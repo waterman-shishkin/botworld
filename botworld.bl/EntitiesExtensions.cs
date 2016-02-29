@@ -14,7 +14,7 @@
 
 		private static EntityInfo PrepareEntityInfoInternal(IEntity entity)
 		{
-			return new EntityInfo(entity.Type, entity.HP, entity.AttackStrength, entity.DefenceStrength, entity.Location, entity.CanShareCell, entity.IsCollectable, entity is IPointsProvider ? ((IPointsProvider)entity).WP : entity is IBot ? ((IBot)entity).WP : 0);
+			return new EntityInfo(entity.Type, entity.HP, entity.AttackStrength, entity.AutoDamageStrength, entity.DefenceStrength, entity.Location, entity.CanShareCell, entity.IsCollectable, entity is IPointsProvider ? ((IPointsProvider)entity).WP : entity is IBot ? ((IBot)entity).WP : 0);
 		}
 	}
 }

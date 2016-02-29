@@ -61,7 +61,7 @@ namespace botworld.bl.tests
 			};
 			var actions = new List<BotAction>();
 			for (var i = 0; i < expectedActions.Length; i++)
-				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, 5, 3, new Location(1, 1), 10, Direction.North), null));
+				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, 5, 0, 3, new Location(1, 1), 10, Direction.North), null));
 
 			Assert.That(actions.ToArray(), Is.EqualTo(expectedActions));
 		}
@@ -98,7 +98,7 @@ namespace botworld.bl.tests
 			};
 			var actions = new List<BotAction>();
 			for (var i = 0; i < expectedActions.Length; i++)
-				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, 5, 3, new Location(1, 1), 10, Direction.East), null));
+				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, 5, 0, 3, new Location(1, 1), 10, Direction.East), null));
 
 			Assert.That(actions.ToArray(), Is.EqualTo(expectedActions));
 		}
@@ -136,7 +136,7 @@ namespace botworld.bl.tests
 			};
 			var actions = new List<BotAction>();
 			for (var i = 0; i < expectedActions.Length; i++)
-				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, 5, 3, new Location(1, 1), 10, Direction.South), null));
+				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, 5, 0, 3, new Location(1, 1), 10, Direction.South), null));
 
 			Assert.That(actions.ToArray(), Is.EqualTo(expectedActions));
 		}
@@ -173,7 +173,7 @@ namespace botworld.bl.tests
 			};
 			var actions = new List<BotAction>();
 			for (var i = 0; i < expectedActions.Length; i++)
-				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, 5, 3, new Location(1, 1), 10, Direction.West), null));
+				actions.Add(botIntelligence.ChooseNextAction(new BotInfo(100, 5, 0, 3, new Location(1, 1), 10, Direction.West), null));
 
 			Assert.That(actions.ToArray(), Is.EqualTo(expectedActions));
 		}
