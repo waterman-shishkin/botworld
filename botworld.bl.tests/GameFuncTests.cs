@@ -329,13 +329,266 @@ namespace botworld.bl.tests
 			Assert.DoesNotThrow(testDelegate);
 		}
 
-		// Act - атака на клетку, где не отвечают на атаку (стена (слабая и сильная), мина, гем)
-		// Act - атака на клетку, где отвечают на атаку (бот)
-		// Act - атака на клетку, где отвечают на атаку много кто (несколько ботов, слабый и сильный)
-		// Act - атака на клетку, где отвечают на атаку и погибаем (бот)
-		// Collect - когда нечего собирать
-		// Collect - собираем то, что можно собрать
-		// Explore - исследование клетки
-		// Explore - попытка исследовать клетку за границей
+		[Test]
+		public void Tick_ForBotWhichDesireToActOnGem_ResultsInGemDestroy()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Act);
+			var bot = new Bot("Bot", 20, 10, 0, 5, new Location(2, 4), Direction.North, botIntelligence);
+			var gem = new Gem(100, new Location(2, 3));
+			var map = new Map(10, 20);
+			map.Add(bot);
+			map.Add(gem); 
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(bot.HP, Is.EqualTo(20));
+			Assert.That(bot.WP, Is.EqualTo(0));
+			Assert.That(gem.IsDead, Is.True);
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToActOnMine_ResultsInMineDestroy()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Act);
+			var bot = new Bot("Bot", 20, 10, 0, 5, new Location(2, 4), Direction.North, botIntelligence);
+			var mine = new Mine(100, new Location(2, 3));
+			var map = new Map(10, 20);
+			map.Add(bot);
+			map.Add(mine); 
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(bot.HP, Is.EqualTo(20));
+			Assert.That(mine.IsDead, Is.True);
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToActOnWeakWall_ResultsInWallDestroy()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Act);
+			var bot = new Bot("Bot", 20, 20, 0, 5, new Location(2, 4), Direction.North, botIntelligence);
+			var wall = new Wall(10, 100, 5, new Location(2, 3));
+			var map = new Map(10, 20);
+			map.Add(bot);
+			map.Add(wall); 
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(bot.HP, Is.EqualTo(20));
+			Assert.That(wall.IsDead, Is.True);
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToActOnStrongWall_ResultsInWallDamage()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Act);
+			var bot = new Bot("Bot", 20, 10, 0, 5, new Location(2, 4), Direction.North, botIntelligence);
+			var wall = new Wall(100, 100, 5, new Location(2, 3));
+			var map = new Map(10, 20);
+			map.Add(bot);
+			map.Add(wall); 
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(bot.HP, Is.EqualTo(20));
+			Assert.That(wall.HP, Is.EqualTo(95));
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToActOnAgressiveBot_ResultsInGuestBotDamageAndHostBotDamage()
+		{
+			var guestBotIntelligence = Substitute.For<IBotIntelligence>();
+			guestBotIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Act);
+			var guestBot = new Bot("Guest", 100, 10, 0, 5, new Location(2, 4), Direction.North, guestBotIntelligence);
+			var hostBotIntelligence = Substitute.For<IBotIntelligence>();
+			hostBotIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Step);
+			hostBotIntelligence.ChooseAttackResponseAction(Arg.Any<BotInfo>(), Arg.Any<EntityInfo>()).ReturnsForAnyArgs(AttackResponseAction.Attack);
+			var hostBot = new Bot("Host", 90, 10, 0, 5, new Location(2, 3), Direction.West, hostBotIntelligence);
+			var map = new Map(10, 20);
+			map.Add(guestBot);
+			map.Add(hostBot);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(guestBot.HP, Is.EqualTo(95));
+			Assert.That(hostBot.HP, Is.EqualTo(85));
+			Assert.That(hostBot.Location, Is.EqualTo(new Location(1, 3)));
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToActOnCellOccupiedByTwoAgressiveWeakAndStrongBots_ResultsInGuestBotDamageAndAndHostStrongBotDamageAndHostWeakBotDeath()
+		{
+			var guestBotIntelligence = Substitute.For<IBotIntelligence>();
+			guestBotIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Act);
+			var guestBot = new Bot("Guest", 100, 20, 0, 5, new Location(2, 4), Direction.North, guestBotIntelligence);
+			var hostBotIntelligence = Substitute.For<IBotIntelligence>();
+			hostBotIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Step);
+			hostBotIntelligence.ChooseAttackResponseAction(Arg.Any<BotInfo>(), Arg.Any<EntityInfo>()).ReturnsForAnyArgs(AttackResponseAction.Attack);
+			var targetLocation = new Location(2, 3);
+			var hostBot1 = new Bot("Host-1", 90, 10, 0, 5, targetLocation, Direction.West, hostBotIntelligence);
+			var hostBot2 = new Bot("Host-2", 10, 10, 0, 5, targetLocation, Direction.East, hostBotIntelligence);
+			var map = new Map(10, 20);
+			map.Add(guestBot);
+			map.Add(hostBot1);
+			map.Add(hostBot2);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(guestBot.HP, Is.EqualTo(95));
+			Assert.That(hostBot1.HP, Is.EqualTo(75));
+			Assert.That(hostBot1.Location, Is.EqualTo(new Location(1, 3)));
+			Assert.That(hostBot2.IsDead, Is.True);
+			Assert.That(hostBot2.Location, Is.EqualTo(targetLocation));
+		}
+
+		[Test]
+		public void Tick_ForWeakBotWhichDesireToActOnStrongAgressiveBot_ResultsInGuestBotDeathAndHostBotDamage()
+		{
+			var guestBotIntelligence = Substitute.For<IBotIntelligence>();
+			guestBotIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Act);
+			var guestBot = new Bot("Guest", 20, 10, 0, 5, new Location(2, 4), Direction.North, guestBotIntelligence);
+			var hostBotIntelligence = Substitute.For<IBotIntelligence>();
+			hostBotIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Step);
+			hostBotIntelligence.ChooseAttackResponseAction(Arg.Any<BotInfo>(), Arg.Any<EntityInfo>()).ReturnsForAnyArgs(AttackResponseAction.Attack);
+			var hostBot = new Bot("Host", 100, 50, 0, 5, new Location(2, 3), Direction.West, hostBotIntelligence);
+			var map = new Map(10, 20);
+			map.Add(guestBot);
+			map.Add(hostBot);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(guestBot.IsDead, Is.True);
+			Assert.That(hostBot.HP, Is.EqualTo(95));
+			Assert.That(hostBot.Location, Is.EqualTo(new Location(1, 3)));
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToCollectAtEmptyCell_DoNotThrow()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Collect);
+			var bot = new Bot("Bot", 20, 10, 0, 5, new Location(2, 4), Direction.North, botIntelligence);
+			var map = new Map(10, 20);
+			map.Add(bot);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			TestDelegate testDelegate = () => game.Tick();
+
+			Assert.DoesNotThrow(testDelegate);
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToCollectAtCellContainingNothingToCollect_DoNotThrow()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Collect);
+			var location = new Location(2, 4);
+			var bot1 = new Bot("Bot-1", 20, 10, 0, 5, location, Direction.North, botIntelligence);
+			var bot2 = new Bot("Bot-2", 40, 20, 0, 10, location, Direction.North, botIntelligence);
+			var bot3 = new Bot("Bot-3", 60, 30, 0, 15, location, Direction.North, botIntelligence);
+			var map = new Map(10, 20);
+			map.Add(bot1);
+			map.Add(bot2);
+			map.Add(bot3);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			TestDelegate testDelegate = () => game.Tick();
+
+			Assert.DoesNotThrow(testDelegate);
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToCollectAtCellContainingBotsAndGems_ResultsInGemsCollectionByFirstBot()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Collect);
+			var location = new Location(2, 4);
+			var bot1 = new Bot("Bot-1", 20, 10, 0, 5, location, Direction.North, botIntelligence);
+			var bot2 = new Bot("Bot-2", 40, 20, 0, 10, location, Direction.North, botIntelligence);
+			var bot3 = new Bot("Bot-3", 60, 30, 0, 15, location, Direction.North, botIntelligence);
+			var gem1 = new Gem(100, location);
+			var gem2 = new Gem(200, location);
+			var map = new Map(10, 20);
+			map.Add(bot1);
+			map.Add(bot2);
+			map.Add(bot3);
+			map.Add(gem1);
+			map.Add(gem2);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(bot1.WP, Is.EqualTo(300));
+			Assert.That(bot1.CollectedEntities, Is.EqualTo(new [] { gem1, gem2 }));
+			Assert.That(bot2.WP, Is.EqualTo(0));
+			Assert.That(bot3.WP, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToExploreOutsideOfMap_DoNotThrow()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Explore);
+			var bot = new Bot("Bot", 20, 10, 0, 5, new Location(0, 0), Direction.North, botIntelligence);
+			var map = new Map(10, 20);
+			map.Add(bot);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			TestDelegate testDelegate = () => game.Tick();
+
+			Assert.DoesNotThrow(testDelegate);
+		}
+
+		[Test]
+		public void Tick_ForBotWhichDesireToExploreAtCellContainingBotsAndGems_ResultsInMarkingThisCellAsExplored()
+		{
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			botIntelligence.ChooseNextAction(Arg.Any<BotInfo>(), Arg.Any<Dictionary<Location, IEnumerable<EntityInfo>>>()).ReturnsForAnyArgs(BotAction.Explore);
+			var location1 = new Location(2, 4);
+			var bot1 = new Bot("Bot-1", 20, 10, 0, 5, location1, Direction.North, botIntelligence);
+			var location2 = new Location(2, 3);
+			var bot2 = new Bot("Bot-2", 40, 20, 0, 10, location2, Direction.North, botIntelligence);
+			var gem1 = new Gem(100, location2);
+			var location3 = new Location(2, 2);
+			var gem2 = new Gem(200, location3);
+			var map = new Map(10, 20);
+			map.Add(bot1);
+			map.Add(bot2);
+			map.Add(gem1);
+			map.Add(gem2);
+			var scenario = Substitute.For<IGameScenario>();
+			var game = new Game(map, scenario);
+
+			game.Tick();
+
+			Assert.That(map.IsExplored(bot1, location1), Is.True);
+			Assert.That(map.IsExplored(bot1, location2), Is.True);
+			Assert.That(map.IsExplored(bot1, location3), Is.False);
+			Assert.That(map.IsExplored(bot2, location1), Is.False);
+			Assert.That(map.IsExplored(bot2, location2), Is.True);
+			Assert.That(map.IsExplored(bot2, location3), Is.True);
+		}
 	}
 }
