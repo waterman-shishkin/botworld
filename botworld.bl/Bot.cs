@@ -1,17 +1,23 @@
-﻿namespace botworld.bl
+﻿using System;
+using System.Collections.Generic;
+
+namespace botworld.bl
 {
 	public class Bot : IBot
 	{
 		private readonly IBotIntelligence botIntelligence;
+		private readonly List<IEntity> collectedEntities = new List<IEntity>();
 
-		public Bot(string name, double hp, double attackStrength, double defenceStrength, Location location, Direction direction, IBotIntelligence botIntelligence)
+		public Bot(string name, double hp, double attackStrength, double autoDamageStrength, double defenceStrength, Location location, Direction direction, IBotIntelligence botIntelligence)
 		{
 			Name = name;
 			HP = hp;
 			AttackStrength = attackStrength;
+			AutoDamageStrength = autoDamageStrength;
 			DefenceStrength = defenceStrength;
 			Location = location;
 			Direction = direction;
+			WP = 0;
 			this.botIntelligence = botIntelligence;
 		}
 		
@@ -24,7 +30,11 @@
 
 		public double HP { get; private set; }
 
+		public int WP { get; private set; }
+
 		public double AttackStrength { get; private set; }
+
+		public double AutoDamageStrength { get; private set; }
 
 		public double DefenceStrength { get; private set; }
 
@@ -68,12 +78,26 @@
 
 		public Direction Direction { get; private set; }
 
+		public IEnumerable<IEntity> CollectedEntities
+		{
+			get { return collectedEntities.AsReadOnly(); }
+		}
+
 		public void UpdateDirection(Direction direction)
 		{
 			var previousDirection = Direction;
 			Direction = direction;
 			if (Direction != previousDirection)
 				botIntelligence.OnRotation(previousDirection, Direction);
+		}
+
+		public int UpdateWP(int wpDiff)
+		{
+			var previousWP = WP;
+			WP += wpDiff;
+			if (WP != previousWP)
+				botIntelligence.OnWPChange(previousWP, WP);
+			return WP;
 		}
 
 		public void UpdateLocation(Location location)
@@ -84,9 +108,23 @@
 				botIntelligence.OnMove(previousLocation, Location);
 		}
 
-		public BotAction ChooseNextAction()
+		public BotAction ChooseNextAction(Dictionary<Location, IEnumerable<EntityInfo>> neighborsInfo)
 		{
-			return botIntelligence.ChooseNextAction(this.PrepareBotInfo());
+			return botIntelligence.ChooseNextAction(this.PrepareBotInfo(), neighborsInfo);
+		}
+
+		public void Collect(IEntity entity)
+		{
+			if (!entity.IsCollectable)
+				throw new InvalidOperationException(string.Format("The entity {0} is not collectable", entity));
+
+			collectedEntities.Add(entity);
+			botIntelligence.OnCollect(entity.PrepareEntityInfo());
+		}
+
+		public void OnExplore(IEnumerable<EntityInfo> info)
+		{
+			botIntelligence.OnExplore(info);
 		}
 	}
 }

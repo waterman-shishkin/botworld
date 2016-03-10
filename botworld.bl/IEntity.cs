@@ -9,6 +9,7 @@
 		bool IsDead { get; }
 		double HP { get; }
 		double AttackStrength { get; }
+		double AutoDamageStrength { get; }
 		double DefenceStrength { get; }
 		bool ImpactDamage(double damage);
 		InvasionResponseAction ChooseInvasionResponseAction(IEntity guest);

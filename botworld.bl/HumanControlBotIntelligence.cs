@@ -21,7 +21,7 @@ namespace botworld.bl
 			this.keysSource = keysSource;
 		}
 
-		public BotAction ChooseNextAction(BotInfo botInfo)
+		public BotAction ChooseNextAction(BotInfo botInfo, Dictionary<Location, IEnumerable<EntityInfo>> neighborsInfo)
 		{
 			if (actionsQueue.Any())
 				return actionsQueue.Dequeue();
@@ -64,6 +64,18 @@ namespace botworld.bl
 		}
 
 		public void OnMove(Location previousLocation, Location newLocation)
+		{
+		}
+
+		public void OnWPChange(int previousWP, int newWP)
+		{
+		}
+
+		public void OnCollect(EntityInfo entityInfo)
+		{
+		}
+
+		public void OnExplore(IEnumerable<EntityInfo> info)
 		{
 		}
 

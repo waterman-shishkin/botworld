@@ -127,7 +127,9 @@ namespace botworld.bl
 			EnsureIsHostedEntity(bot);
 			EnsureLocationIsInRange(location);
 			GetCell(location).VisitorsIds.Add(botIds[bot]);
-			return GetEntitiesInfo(location);
+			var info = GetEntitiesInfo(location).ToArray();
+			bot.OnExplore(info);
+			return info;
 		}
 
 		private IEnumerable<EntityInfo> GetEntitiesInfo(Location location)
@@ -136,10 +138,17 @@ namespace botworld.bl
 			return GetEntities(location).Select(e => e.PrepareEntityInfo());
 		}
 
+		private IEnumerable<EntityInfo> GetEntitiesInfo(IBot bot)
+		{
+			EnsureIsHostedEntity(bot);
+			var location = bot.Location;
+			return GetEntities(location).Where(e => e!= bot).Select(e => e.PrepareEntityInfo());
+		}
+
 		public Dictionary<Location, IEnumerable<EntityInfo>> GetNeighborsInfo(IBot bot)
 		{
 			EnsureIsHostedEntity(bot);
-			var result = new Dictionary<Location, IEnumerable<EntityInfo>> { { bot.Location, GetEntitiesInfo(bot.Location) } };
+			var result = new Dictionary<Location, IEnumerable<EntityInfo>> { { bot.Location, GetEntitiesInfo(bot) } };
 			var directions = Enum.GetValues(typeof(Direction)).Cast<Direction>().ToArray();
 			foreach (var direction in directions)
 			{

@@ -2,6 +2,6 @@
 {
 	public interface IPointsProvider
 	{
-		int Points { get; }
+		int WP { get; }
 	}
 }

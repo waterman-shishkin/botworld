@@ -36,6 +36,8 @@ namespace botworld.bl
 
 		public double AttackStrength { get; private set; }
 
+		public double AutoDamageStrength { get { return 0; } }
+
 		public double DefenceStrength { get; private set; }
 
 		public bool ImpactDamage(double damage)
