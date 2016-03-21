@@ -11,7 +11,7 @@ namespace botworld.bl.tests
 		public void GameOver_Returns_ValueFromScenario([Values(true, false)] bool gameOverValue)
 		{
 			var scenario = Substitute.For<IGameScenario>();
-			scenario.GameOver.Returns(gameOverValue);
+			scenario.IsGameOver(Arg.Any<IMap>()).Returns(gameOverValue);
 			var game = new Game(null, scenario);
 
 			Assert.That(game.GameOver, Is.EqualTo(gameOverValue));
@@ -24,7 +24,7 @@ namespace botworld.bl.tests
 			var bot1 = Substitute.For<IBot>();
 			var bot2 = Substitute.For<IBot>();
 			var bots = new [] {bot1, bot2};
-			scenario.Winners.Returns(bots);
+			scenario.GetWinners(Arg.Any<IMap>()).Returns(bots);
 			var game = new Game(null, scenario);
 
 			Assert.That(game.Winners, Is.EqualTo(bots));

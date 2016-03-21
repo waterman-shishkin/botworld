@@ -16,7 +16,7 @@
     <Width>512</Width>
     <Height>512</Height>
   </LevelMaximumSize>
-  <Filename>D:\Projects\botworld\levels\botworld.oep</Filename>
+  <Filename>D:\Projects\Personal\botworld\levels\botworld.oep</Filename>
   <AngleMode>Degrees</AngleMode>
   <CameraEnabled>false</CameraEnabled>
   <CameraSize>
@@ -24,7 +24,9 @@
     <Height>480</Height>
   </CameraSize>
   <ExportCameraPosition>false</ExportCameraPosition>
-  <LevelValueDefinitions />
+  <LevelValueDefinitions>
+    <ValueDefinition xsi:type="StringValueDefinition" Name="ScenarioJSON" Default="" MaxChars="-1" MultiLine="true" />
+  </LevelValueDefinitions>
   <LayerDefinitions>
     <LayerDefinition xsi:type="EntityLayerDefinition">
       <Name>Entities</Name>

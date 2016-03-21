@@ -10,9 +10,9 @@ namespace botworld.bl.tests
 		public void Winners_ForMapWithoutBots_ReturnsEmptyCollection()
 		{
 			var map = Substitute.For<IMap>();
-			var scenario = new PointsScenario(map, 100);
+			var scenario = new PointsScenario(100);
 
-			Assert.That(scenario.Winners, Is.Empty);
+			Assert.That(scenario.GetWinners(map), Is.Empty);
 		}
 
 		[Test]
@@ -22,9 +22,9 @@ namespace botworld.bl.tests
 			var bot1 = Substitute.For<IBot>();
 			var bot2 = Substitute.For<IBot>();
 			map.GetBots().ReturnsForAnyArgs(new[] {bot1, bot2});
-			var scenario = new PointsScenario(map, 100);
+			var scenario = new PointsScenario(100);
 
-			Assert.That(scenario.Winners, Is.Empty);
+			Assert.That(scenario.GetWinners(map), Is.Empty);
 		}
 
 		[Test]
@@ -38,18 +38,18 @@ namespace botworld.bl.tests
 			var bot3 = Substitute.For<IBot>();
 			bot3.WP.Returns(350);
 			map.GetBots().ReturnsForAnyArgs(new[] { bot1, bot2, bot3 });
-			var scenario = new PointsScenario(map, 100);
+			var scenario = new PointsScenario(100);
 
-			Assert.That(scenario.Winners, Is.EqualTo(new[] { bot1, bot3 }));
+			Assert.That(scenario.GetWinners(map), Is.EqualTo(new[] { bot1, bot3 }));
 		}
 
 		[Test]
 		public void GameOver_ForMapWithoutBots_ReturnsTrue()
 		{
 			var map = Substitute.For<IMap>();
-			var scenario = new PointsScenario(map, 100);
+			var scenario = new PointsScenario(100);
 
-			Assert.That(scenario.GameOver, Is.True);
+			Assert.That(scenario.IsGameOver(map), Is.True);
 		}
 
 		[Test]
@@ -61,9 +61,9 @@ namespace botworld.bl.tests
 			var bot2 = Substitute.For<IBot>();
 			bot2.IsDead.Returns(true);
 			map.GetBots().ReturnsForAnyArgs(new[] { bot1, bot2 });
-			var scenario = new PointsScenario(map, 100);
+			var scenario = new PointsScenario(100);
 
-			Assert.That(scenario.GameOver, Is.True);
+			Assert.That(scenario.IsGameOver(map), Is.True);
 		}
 
 		[Test]
@@ -77,9 +77,9 @@ namespace botworld.bl.tests
 			var bot3 = Substitute.For<IBot>();
 			bot3.IsDead.Returns(true);
 			map.GetBots().ReturnsForAnyArgs(new[] { bot1, bot2, bot3 });
-			var scenario = new PointsScenario(map, 100);
+			var scenario = new PointsScenario(100);
 
-			Assert.That(scenario.GameOver, Is.False);
+			Assert.That(scenario.IsGameOver(map), Is.False);
 		}
 
 		[Test]
@@ -93,9 +93,9 @@ namespace botworld.bl.tests
 			var bot3 = Substitute.For<IBot>();
 			bot3.WP.Returns(350);
 			map.GetBots().ReturnsForAnyArgs(new[] { bot1, bot2, bot3 });
-			var scenario = new PointsScenario(map, 100);
+			var scenario = new PointsScenario(100);
 
-			Assert.That(scenario.GameOver, Is.True);
+			Assert.That(scenario.IsGameOver(map), Is.True);
 		}
 	}
 }

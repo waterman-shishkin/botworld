@@ -12,12 +12,12 @@ namespace botworld.bl
 
 		public bool GameOver
 		{
-			get { return scenario.GameOver; }
+			get { return scenario.IsGameOver(Map); }
 		}
 
 		public IEnumerable<IBot> Winners
 		{
-			get { return scenario.Winners; }
+			get { return scenario.GetWinners(Map); }
 		}
 
 		public Game(IMap map, IGameScenario scenario)

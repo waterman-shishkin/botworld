@@ -16,6 +16,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "botworld.bl.tests", "botwor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "botworld.console", "botworld.console\botworld.console.csproj", "{176557AB-4793-44D7-9067-0201BD6531EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "botworld.ogmo", "botworld.ogmo\botworld.ogmo.csproj", "{DAB9A569-0856-45BA-8FFB-4B13E5A2F33F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "botworld.ogmo.tests", "botworld.ogmo.tests\botworld.ogmo.tests.csproj", "{94F73FC4-40FF-4EDB-B56B-ADA7DAAFAFA4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +38,14 @@ Global
 		{176557AB-4793-44D7-9067-0201BD6531EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{176557AB-4793-44D7-9067-0201BD6531EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{176557AB-4793-44D7-9067-0201BD6531EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAB9A569-0856-45BA-8FFB-4B13E5A2F33F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAB9A569-0856-45BA-8FFB-4B13E5A2F33F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAB9A569-0856-45BA-8FFB-4B13E5A2F33F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAB9A569-0856-45BA-8FFB-4B13E5A2F33F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94F73FC4-40FF-4EDB-B56B-ADA7DAAFAFA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94F73FC4-40FF-4EDB-B56B-ADA7DAAFAFA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94F73FC4-40FF-4EDB-B56B-ADA7DAAFAFA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94F73FC4-40FF-4EDB-B56B-ADA7DAAFAFA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

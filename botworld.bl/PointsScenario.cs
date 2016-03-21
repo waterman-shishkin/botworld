@@ -5,29 +5,21 @@ namespace botworld.bl
 {
 	public class PointsScenario : IGameScenario
 	{
-		private readonly IMap map;
-		private readonly int points;
+		public int WP { get; private set; }
 
-		public bool GameOver
+		public bool IsGameOver(IMap map)
 		{
-			get
-			{
-				return Winners.Any() || map.GetBots().All(b => b.IsDead);
-			}
+			return GetWinners(map).Any() || map.GetBots().All(b => b.IsDead);
 		}
 
-		public IEnumerable<IBot> Winners
+		public IEnumerable<IBot> GetWinners(IMap map)
 		{
-			get
-			{
-				return map.GetBots().Where(b => b.WP >= points);
-			}
+			return map.GetBots().Where(b => b.WP >= WP);
 		}
 
-		public PointsScenario(IMap map, int points)
+		public PointsScenario(int wp)
 		{
-			this.map = map;
-			this.points = points;
+			WP = wp;
 		}
 	}
 }

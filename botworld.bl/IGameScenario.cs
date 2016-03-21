@@ -4,7 +4,7 @@ namespace botworld.bl
 {
 	public interface IGameScenario
 	{
-		bool GameOver { get; }
-		IEnumerable<IBot> Winners { get; }
+		bool IsGameOver(IMap map);
+		IEnumerable<IBot> GetWinners(IMap map);
 	}
 }

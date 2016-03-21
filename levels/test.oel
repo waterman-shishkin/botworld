@@ -1,4 +1,4 @@
-<level width="512" height="512">
+<level width="512" height="512" ScenarioJSON="{&#xD;&#xA;	&quot;type&quot;: &quot;points&quot;,&#xD;&#xA;	&quot;wp&quot;: 20&#xD;&#xA;}">
   <Entities>
     <wall id="0" x="208" y="176" AttackStrength="10" DefenseStrength="10" />
     <wall id="1" x="192" y="192" AttackStrength="10" DefenseStrength="10" />
