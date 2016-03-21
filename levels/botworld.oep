@@ -57,6 +57,7 @@
       <ValueDefinitions>
         <ValueDefinition xsi:type="FloatValueDefinition" Name="AttackStrength" Default="10" Min="0" Max="100" Round="0.1" />
         <ValueDefinition xsi:type="FloatValueDefinition" Name="DefenseStrength" Default="10" Min="0" Max="100" Round="0.1" />
+        <ValueDefinition xsi:type="FloatValueDefinition" Name="HP" Default="100" Min="0" Max="1000" Round="0.1" />
       </ValueDefinitions>
       <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
     </EntityDefinition>
@@ -73,7 +74,7 @@
         <RectColor A="255" R="255" G="0" B="0" />
       </ImageDefinition>
       <ValueDefinitions>
-        <ValueDefinition xsi:type="IntValueDefinition" Name="Points" Default="10" Min="0" Max="1000" ShowSlider="false" />
+        <ValueDefinition xsi:type="IntValueDefinition" Name="WP" Default="10" Min="0" Max="1000" ShowSlider="false" />
       </ValueDefinitions>
       <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
     </EntityDefinition>
@@ -90,7 +91,7 @@
         <RectColor A="255" R="255" G="0" B="0" />
       </ImageDefinition>
       <ValueDefinitions>
-        <ValueDefinition xsi:type="FloatValueDefinition" Name="AttackStrength" Default="0" Min="0" Max="100" Round="0.1" />
+        <ValueDefinition xsi:type="FloatValueDefinition" Name="AttackStrength" Default="50" Min="0" Max="1000" Round="0.1" />
       </ValueDefinitions>
       <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
     </EntityDefinition>

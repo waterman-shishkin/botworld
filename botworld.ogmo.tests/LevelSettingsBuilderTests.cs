@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Xml.Linq;
 using botworld.bl;
 using NUnit.Framework;
@@ -44,10 +45,9 @@ namespace botworld.ogmo.tests
 			const string level =
 				@"<level width='512' height='640' ScenarioJSON='{&#xD;&#xA;	&quot;type&quot;: &quot;points&quot;,&#xD;&#xA;	&quot;wp&quot;: 20&#xD;&#xA;}'>
 					<Entities>
-						<wall x='208' y='176' AttackStrength='10' DefenseStrength='10' />
-						<gem x='224' y='240' Points='10' />
-						<mine x='192' y='208' AttackStrength='0' />
-						<bot x='480' y='416' AttackStrength='20' DefenseStrength='10' HP='100' Intelligence='Human' />
+						<wall x='208' y='176' AttackStrength='10' DefenseStrength='20' HP='100' />
+						<gem x='224' y='240' WP='10' />
+						<mine x='192' y='208' AttackStrength='50' />
 					</Entities>
 				</level>";
 			var levelDoc = XDocument.Parse(level);
@@ -62,6 +62,21 @@ namespace botworld.ogmo.tests
 			Assert.That(settings.Scenario, Is.TypeOf<PointsScenario>());
 			var scenario = settings.Scenario as PointsScenario;
 			Assert.That(scenario.WP, Is.EqualTo(20));
+			var entities = settings.Entities.ToArray();
+			Assert.That(entities[0], Is.TypeOf<Wall>());
+			var wall = entities[0] as Wall;
+			Assert.That(wall.Location, Is.EqualTo(new Location(13, 11)));
+			Assert.That(wall.HP, Is.EqualTo(100));
+			Assert.That(wall.AttackStrength, Is.EqualTo(10));
+			Assert.That(wall.DefenseStrength, Is.EqualTo(20));
+			Assert.That(entities[1], Is.TypeOf<Gem>());
+			var gem = entities[1] as Gem;
+			Assert.That(gem.Location, Is.EqualTo(new Location(14, 15)));
+			Assert.That(gem.WP, Is.EqualTo(10));
+			Assert.That(entities[2], Is.TypeOf<Mine>());
+			var mine = entities[2] as Mine;
+			Assert.That(mine.Location, Is.EqualTo(new Location(12, 13)));
+			Assert.That(mine.AttackStrength, Is.EqualTo(50));
 		}
 	}
 }

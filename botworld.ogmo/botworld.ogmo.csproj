@@ -47,9 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntitiesFactory.cs" />
     <Compile Include="GameScenariosFactory.cs" />
     <Compile Include="LevelSettingsBuilder.cs" />
     <Compile Include="LevelSettings.cs" />
+    <Compile Include="ParsingHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

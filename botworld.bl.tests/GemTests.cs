@@ -67,7 +67,7 @@ namespace botworld.bl.tests
 		{
 			var gem = new Gem(100, new Location(2, 4));
 
-			Assert.That(gem.DefenceStrength, Is.EqualTo(0));
+			Assert.That(gem.DefenseStrength, Is.EqualTo(0));
 		}
 
 		[Test]
@@ -85,7 +85,7 @@ namespace botworld.bl.tests
 			Assert.That(entityInfo.HP, Is.EqualTo(1));
 			Assert.That(entityInfo.AttackStrength, Is.EqualTo(0));
 			Assert.That(entityInfo.AutoDamageStrength, Is.EqualTo(0));
-			Assert.That(entityInfo.DefenceStrength, Is.EqualTo(0));
+			Assert.That(entityInfo.DefenseStrength, Is.EqualTo(0));
 			Assert.That(entityInfo.WP, Is.EqualTo(100));
 		}
 

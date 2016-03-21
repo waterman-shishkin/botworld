@@ -27,12 +27,11 @@ namespace botworld.ogmo
 		public LevelSettings Build()
 		{
 			var colorElement = project.XPathSelectElement(@"project/BackgroundColor");
-			var backgroundColor = Color.FromArgb(ParseIntAttribute(colorElement, "A"), ParseIntAttribute(colorElement, "R"),
-				ParseIntAttribute(colorElement, "G"), ParseIntAttribute(colorElement, "B"));
+			var backgroundColor = Color.FromArgb(ParsingHelper.ParseIntAttribute(colorElement, "A"), ParsingHelper.ParseIntAttribute(colorElement, "R"), ParsingHelper.ParseIntAttribute(colorElement, "G"), ParsingHelper.ParseIntAttribute(colorElement, "B"));
 
 			var gridElement = project.XPathSelectElement(@"project/LayerDefinitions/LayerDefinition[Name = 'Entities']/Grid");
-			var cellWidth = ParseIntElement(gridElement, "Width");
-			var cellHeight = ParseIntElement(gridElement, "Height");
+			var cellWidth = ParsingHelper.ParseIntElement(gridElement, "Width");
+			var cellHeight = ParsingHelper.ParseIntElement(gridElement, "Height");
 			if (cellWidth != cellHeight)
 				throw new ArgumentException("Ширина и высота ячейки должны быть равны");
 
@@ -41,30 +40,23 @@ namespace botworld.ogmo
 				e => e.Element("ImageDefinition").Attribute("ImagePath").Value);
 
 			var levelElement = level.XPathSelectElement(@"level");
-			var widthPixels = ParseIntAttribute(levelElement, "width");
+			var widthPixels = ParsingHelper.ParseIntAttribute(levelElement, "width");
 			var width = widthPixels / cellWidth;
 			if (widthPixels != width * cellWidth)
 				throw new ArgumentException("Ширина уровня должна быть кратна размеру ячейки");
-			var heightPixels = ParseIntAttribute(levelElement, "height");
+			var heightPixels = ParsingHelper.ParseIntAttribute(levelElement, "height");
 			var height = heightPixels / cellHeight;
 			if (heightPixels != height * cellHeight)
 				throw new ArgumentException("Высота уровня должна быть кратна размеру ячейки");
 
 			var scenarioJson = JObject.Parse(levelElement.Attribute("ScenarioJSON").Value);
-
 			var scenario = new GameScenariosFactory().Create(scenarioJson);
 
-			return new LevelSettings(width, height, cellWidth, backgroundColor, imageFilenames, scenario, null);
-		}
+			entitiesElements = level.XPathSelectElements(@"level/Entities/*");
+			var entitiesFactory = new EntitiesFactory(cellWidth);
+			var entities = entitiesElements.Select(entitiesFactory.Create);
 
-		private static int ParseIntAttribute(XElement element, string attributeName)
-		{
-			return int.Parse(element.Attribute(attributeName).Value);
-		}
-
-		private static int ParseIntElement(XElement parentElement, string valueElementName)
-		{
-			return int.Parse(parentElement.Element(valueElementName).Value);
+			return new LevelSettings(width, height, cellWidth, backgroundColor, imageFilenames, scenario, entities);
 		}
 	}
 }

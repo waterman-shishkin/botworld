@@ -249,7 +249,7 @@ namespace botworld.bl.tests
 		{
 			var bot = new Bot("Angry bot", 100, 5, 0, 3, new Location(2, 4), Direction.North, null);
 
-			Assert.That(bot.DefenceStrength, Is.EqualTo(3));
+			Assert.That(bot.DefenseStrength, Is.EqualTo(3));
 		}
 
 		[Test]
@@ -269,7 +269,7 @@ namespace botworld.bl.tests
 			Assert.That(entityInfo.HP, Is.EqualTo(100));
 			Assert.That(entityInfo.AttackStrength, Is.EqualTo(5));
 			Assert.That(entityInfo.AutoDamageStrength, Is.EqualTo(1));
-			Assert.That(entityInfo.DefenceStrength, Is.EqualTo(3));
+			Assert.That(entityInfo.DefenseStrength, Is.EqualTo(3));
 			Assert.That(entityInfo.WP, Is.EqualTo(10));
 		}
 
@@ -290,7 +290,7 @@ namespace botworld.bl.tests
 			Assert.That(botInfo.HP, Is.EqualTo(100));
 			Assert.That(botInfo.AttackStrength, Is.EqualTo(5));
 			Assert.That(botInfo.AutoDamageStrength, Is.EqualTo(1));
-			Assert.That(botInfo.DefenceStrength, Is.EqualTo(3));
+			Assert.That(botInfo.DefenseStrength, Is.EqualTo(3));
 			Assert.That(botInfo.WP, Is.EqualTo(10));
 			Assert.That(botInfo.Direction, Is.EqualTo(Direction.North));
 		}

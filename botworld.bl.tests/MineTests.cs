@@ -59,7 +59,7 @@ namespace botworld.bl.tests
 		{
 			var mine = new Mine(100, new Location(2, 4));
 
-			Assert.That(mine.DefenceStrength, Is.EqualTo(0));
+			Assert.That(mine.DefenseStrength, Is.EqualTo(0));
 		}
 
 		[Test]
@@ -77,7 +77,7 @@ namespace botworld.bl.tests
 			Assert.That(entityInfo.HP, Is.EqualTo(1));
 			Assert.That(entityInfo.AttackStrength, Is.EqualTo(100));
 			Assert.That(entityInfo.AutoDamageStrength, Is.EqualTo(1));
-			Assert.That(entityInfo.DefenceStrength, Is.EqualTo(0));
+			Assert.That(entityInfo.DefenseStrength, Is.EqualTo(0));
 		}
 
 		[Test]

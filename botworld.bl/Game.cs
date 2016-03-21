@@ -87,7 +87,7 @@ namespace botworld.bl
 
 		private void ProceedImpact(IEntity aggressor, IEntity defender)
 		{
-			var damage = aggressor.AttackStrength - defender.DefenceStrength;
+			var damage = aggressor.AttackStrength - defender.DefenseStrength;
 			if (damage > 0)
 				defender.ImpactDamage(damage);
 			if (defender.IsDead)

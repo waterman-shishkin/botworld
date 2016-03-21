@@ -67,7 +67,7 @@ namespace botworld.bl.tests
 		{
 			var wall = new Wall(100, 10, 10, new Location(2, 4));
 
-			Assert.That(wall.DefenceStrength, Is.EqualTo(10));
+			Assert.That(wall.DefenseStrength, Is.EqualTo(10));
 		}
 
 		[Test]
@@ -85,7 +85,7 @@ namespace botworld.bl.tests
 			Assert.That(entityInfo.HP, Is.EqualTo(100));
 			Assert.That(entityInfo.AttackStrength, Is.EqualTo(10));
 			Assert.That(entityInfo.AutoDamageStrength, Is.EqualTo(0));
-			Assert.That(entityInfo.DefenceStrength, Is.EqualTo(10));
+			Assert.That(entityInfo.DefenseStrength, Is.EqualTo(10));
 		}
 
 		[Test]

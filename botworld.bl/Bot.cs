@@ -8,13 +8,13 @@ namespace botworld.bl
 		private readonly IBotIntelligence botIntelligence;
 		private readonly List<IEntity> collectedEntities = new List<IEntity>();
 
-		public Bot(string name, double hp, double attackStrength, double autoDamageStrength, double defenceStrength, Location location, Direction direction, IBotIntelligence botIntelligence)
+		public Bot(string name, double hp, double attackStrength, double autoDamageStrength, double defenseStrength, Location location, Direction direction, IBotIntelligence botIntelligence)
 		{
 			Name = name;
 			HP = hp;
 			AttackStrength = attackStrength;
 			AutoDamageStrength = autoDamageStrength;
-			DefenceStrength = defenceStrength;
+			DefenseStrength = defenseStrength;
 			Location = location;
 			Direction = direction;
 			WP = 0;
@@ -36,7 +36,7 @@ namespace botworld.bl
 
 		public double AutoDamageStrength { get; private set; }
 
-		public double DefenceStrength { get; private set; }
+		public double DefenseStrength { get; private set; }
 
 		public bool ImpactDamage(double damage)
 		{

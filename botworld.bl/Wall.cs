@@ -2,11 +2,11 @@ namespace botworld.bl
 {
 	public class Wall : IEntity
 	{
-		public Wall(double hp, double attackStrength, double defenceStrength, Location location)
+		public Wall(double hp, double attackStrength, double defenseStrength, Location location)
 		{
 			HP = hp;
 			AttackStrength = attackStrength;
-			DefenceStrength = defenceStrength;
+			DefenseStrength = defenseStrength;
 			Location = location;
 		}
 
@@ -38,7 +38,7 @@ namespace botworld.bl
 
 		public double AutoDamageStrength { get { return 0; } }
 
-		public double DefenceStrength { get; private set; }
+		public double DefenseStrength { get; private set; }
 
 		public bool ImpactDamage(double damage)
 		{

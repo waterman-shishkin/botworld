@@ -927,7 +927,7 @@ namespace botworld.bl.tests
 					Assert.That(entityInfo.Type, Is.EqualTo(expectedInfo.Type));
 					Assert.That(entityInfo.HP, Is.EqualTo(expectedInfo.HP));
 					Assert.That(entityInfo.AttackStrength, Is.EqualTo(expectedInfo.AttackStrength));
-					Assert.That(entityInfo.DefenceStrength, Is.EqualTo(expectedInfo.DefenceStrength));
+					Assert.That(entityInfo.DefenseStrength, Is.EqualTo(expectedInfo.DefenseStrength));
 					Assert.That(entityInfo.Location, Is.EqualTo(expectedInfo.Location));
 					Assert.That(entityInfo.CanShareCell, Is.EqualTo(expectedInfo.CanShareCell));
 					Assert.That(entityInfo.IsCollectable, Is.EqualTo(expectedInfo.IsCollectable));
@@ -975,7 +975,7 @@ namespace botworld.bl.tests
 					Assert.That(entityInfo.Type, Is.EqualTo(expectedInfo.Type));
 					Assert.That(entityInfo.HP, Is.EqualTo(expectedInfo.HP));
 					Assert.That(entityInfo.AttackStrength, Is.EqualTo(expectedInfo.AttackStrength));
-					Assert.That(entityInfo.DefenceStrength, Is.EqualTo(expectedInfo.DefenceStrength));
+					Assert.That(entityInfo.DefenseStrength, Is.EqualTo(expectedInfo.DefenseStrength));
 					Assert.That(entityInfo.Location, Is.EqualTo(expectedInfo.Location));
 					Assert.That(entityInfo.CanShareCell, Is.EqualTo(expectedInfo.CanShareCell));
 					Assert.That(entityInfo.IsCollectable, Is.EqualTo(expectedInfo.IsCollectable));
@@ -1023,7 +1023,7 @@ namespace botworld.bl.tests
 					Assert.That(entityInfo.Type, Is.EqualTo(expectedInfo.Type));
 					Assert.That(entityInfo.HP, Is.EqualTo(expectedInfo.HP));
 					Assert.That(entityInfo.AttackStrength, Is.EqualTo(expectedInfo.AttackStrength));
-					Assert.That(entityInfo.DefenceStrength, Is.EqualTo(expectedInfo.DefenceStrength));
+					Assert.That(entityInfo.DefenseStrength, Is.EqualTo(expectedInfo.DefenseStrength));
 					Assert.That(entityInfo.Location, Is.EqualTo(expectedInfo.Location));
 					Assert.That(entityInfo.CanShareCell, Is.EqualTo(expectedInfo.CanShareCell));
 					Assert.That(entityInfo.IsCollectable, Is.EqualTo(expectedInfo.IsCollectable));
@@ -1040,7 +1040,7 @@ namespace botworld.bl.tests
 			entity.Type.Returns(entityInfo.Type);
 			entity.HP.Returns(entityInfo.HP);
 			entity.AttackStrength.Returns(entityInfo.AttackStrength);
-			entity.DefenceStrength.Returns(entityInfo.DefenceStrength);
+			entity.DefenseStrength.Returns(entityInfo.DefenseStrength);
 			entity.Location.Returns(entityInfo.Location);
 			entity.CanShareCell.Returns(entityInfo.CanShareCell);
 			entity.IsCollectable.Returns(entityInfo.IsCollectable);
@@ -1095,7 +1095,7 @@ namespace botworld.bl.tests
 				Assert.That(entityInfo.Type, Is.EqualTo(expectedInfo.Type));
 				Assert.That(entityInfo.HP, Is.EqualTo(expectedInfo.HP));
 				Assert.That(entityInfo.AttackStrength, Is.EqualTo(expectedInfo.AttackStrength));
-				Assert.That(entityInfo.DefenceStrength, Is.EqualTo(expectedInfo.DefenceStrength));
+				Assert.That(entityInfo.DefenseStrength, Is.EqualTo(expectedInfo.DefenseStrength));
 				Assert.That(entityInfo.Location, Is.EqualTo(expectedInfo.Location));
 				Assert.That(entityInfo.CanShareCell, Is.EqualTo(expectedInfo.CanShareCell));
 				Assert.That(entityInfo.IsCollectable, Is.EqualTo(expectedInfo.IsCollectable));
