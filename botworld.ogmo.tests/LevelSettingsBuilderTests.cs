@@ -48,6 +48,7 @@ namespace botworld.ogmo.tests
 						<wall x='208' y='176' AttackStrength='10' DefenseStrength='20' HP='100' />
 						<gem x='224' y='240' WP='10' />
 						<mine x='192' y='208' AttackStrength='50' />
+						<bot x='480' y='416' Name='Bot' AttackStrength='20' AutoDamageStrength='0' DefenseStrength='10' HP='100' IntelligenceJSON='{&#xD;&#xA;	&quot;type&quot;: &quot;human&quot;&#xD;&#xA;}' Direction='North' />
 					</Entities>
 				</level>";
 			var levelDoc = XDocument.Parse(level);
@@ -77,6 +78,16 @@ namespace botworld.ogmo.tests
 			var mine = entities[2] as Mine;
 			Assert.That(mine.Location, Is.EqualTo(new Location(12, 13)));
 			Assert.That(mine.AttackStrength, Is.EqualTo(50));
+			Assert.That(entities[3], Is.TypeOf<Bot>());
+			var bot = entities[3] as Bot;
+			Assert.That(bot.Location, Is.EqualTo(new Location(30, 26)));
+			Assert.That(bot.Name, Is.EqualTo("Bot"));
+			Assert.That(bot.AttackStrength, Is.EqualTo(20));
+			Assert.That(bot.AutoDamageStrength, Is.EqualTo(0));
+			Assert.That(bot.DefenseStrength, Is.EqualTo(10));
+			Assert.That(bot.HP, Is.EqualTo(100));
+			Assert.That(bot.Direction, Is.EqualTo(Direction.North));
+			Assert.That(bot.Intelligence, Is.TypeOf<HumanControlBotIntelligence>());
 		}
 	}
 }

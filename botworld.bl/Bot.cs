@@ -5,10 +5,9 @@ namespace botworld.bl
 {
 	public class Bot : IBot
 	{
-		private readonly IBotIntelligence botIntelligence;
 		private readonly List<IEntity> collectedEntities = new List<IEntity>();
 
-		public Bot(string name, double hp, double attackStrength, double autoDamageStrength, double defenseStrength, Location location, Direction direction, IBotIntelligence botIntelligence)
+		public Bot(string name, double hp, double attackStrength, double autoDamageStrength, double defenseStrength, Location location, Direction direction, IBotIntelligence intelligence)
 		{
 			Name = name;
 			HP = hp;
@@ -18,10 +17,12 @@ namespace botworld.bl
 			Location = location;
 			Direction = direction;
 			WP = 0;
-			this.botIntelligence = botIntelligence;
+			Intelligence = intelligence;
 		}
 		
 		public string Name { get; private set; }
+
+		public IBotIntelligence Intelligence { get; private set; }
 
 		public bool IsDead
 		{
@@ -45,18 +46,18 @@ namespace botworld.bl
 			if (HP < 0)
 				HP = 0;
 			if (HP != previousHP)
-				botIntelligence.OnDamage(previousHP, HP);
+				Intelligence.OnDamage(previousHP, HP);
 			return IsDead;
 		}
 
 		public InvasionResponseAction ChooseInvasionResponseAction(IEntity guest)
 		{
-			return botIntelligence.ChooseInvasionResponseAction(this.PrepareBotInfo(), guest.PrepareEntityInfo());
+			return Intelligence.ChooseInvasionResponseAction(this.PrepareBotInfo(), guest.PrepareEntityInfo());
 		}
 
 		public AttackResponseAction ChooseAttackResponseAction(IEntity guest)
 		{
-			return botIntelligence.ChooseAttackResponseAction(this.PrepareBotInfo(), guest.PrepareEntityInfo());
+			return Intelligence.ChooseAttackResponseAction(this.PrepareBotInfo(), guest.PrepareEntityInfo());
 		}
 
 		public EntityType Type
@@ -88,7 +89,7 @@ namespace botworld.bl
 			var previousDirection = Direction;
 			Direction = direction;
 			if (Direction != previousDirection)
-				botIntelligence.OnRotation(previousDirection, Direction);
+				Intelligence.OnRotation(previousDirection, Direction);
 		}
 
 		public int UpdateWP(int wpDiff)
@@ -96,7 +97,7 @@ namespace botworld.bl
 			var previousWP = WP;
 			WP += wpDiff;
 			if (WP != previousWP)
-				botIntelligence.OnWPChange(previousWP, WP);
+				Intelligence.OnWPChange(previousWP, WP);
 			return WP;
 		}
 
@@ -105,12 +106,12 @@ namespace botworld.bl
 			var previousLocation = Location;
 			Location = location;
 			if (Location != previousLocation)
-				botIntelligence.OnMove(previousLocation, Location);
+				Intelligence.OnMove(previousLocation, Location);
 		}
 
 		public BotAction ChooseNextAction(Dictionary<Location, IEnumerable<EntityInfo>> neighborsInfo)
 		{
-			return botIntelligence.ChooseNextAction(this.PrepareBotInfo(), neighborsInfo);
+			return Intelligence.ChooseNextAction(this.PrepareBotInfo(), neighborsInfo);
 		}
 
 		public void Collect(IEntity entity)
@@ -119,12 +120,12 @@ namespace botworld.bl
 				throw new InvalidOperationException(string.Format("The entity {0} is not collectable", entity));
 
 			collectedEntities.Add(entity);
-			botIntelligence.OnCollect(entity.PrepareEntityInfo());
+			Intelligence.OnCollect(entity.PrepareEntityInfo());
 		}
 
 		public void OnExplore(IEnumerable<EntityInfo> info)
 		{
-			botIntelligence.OnExplore(info);
+			Intelligence.OnExplore(info);
 		}
 	}
 }

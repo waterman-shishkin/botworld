@@ -95,7 +95,7 @@
     <wall id="100" x="496" y="400" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="101" x="496" y="416" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="102" x="464" y="416" AttackStrength="10" DefenseStrength="10" HP="100" />
-    <bot id="103" x="480" y="416" AttackStrength="20" DefenseStrength="10" HP="100" Intelligence="Human" />
+    <bot id="103" x="480" y="416" AttackStrength="20" DefenseStrength="10" HP="100" IntelligenceJSON="{&#xD;&#xA;	&quot;type&quot;: &quot;human&quot;&#xD;&#xA;}" Name="Bot" AutoDamageStrength="0" Direction="North" />
     <wall id="104" x="464" y="384" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="105" x="496" y="384" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="106" x="496" y="368" AttackStrength="10" DefenseStrength="10" HP="100" />

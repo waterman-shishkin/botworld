@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
 using botworld.bl;
+using Newtonsoft.Json.Linq;
 
 namespace botworld.ogmo
 {
@@ -16,7 +17,7 @@ namespace botworld.ogmo
 		public IEntity Create(XElement element)
 		{
 			var entityType = element.Name.LocalName;
-			var location = new Location(ParsingHelper.ParseIntAttribute(element, "x") / cellSize, ParsingHelper.ParseIntAttribute(element, "y") / cellSize);
+			var location = ParsingHelper.ParseLocation(element, cellSize);
 			switch (entityType)
 			{
 				case "wall":
@@ -25,6 +26,10 @@ namespace botworld.ogmo
 					return new Gem(ParsingHelper.ParseIntAttribute(element, "WP"), location);
 				case "mine":
 					return new Mine(ParsingHelper.ParseDoubleAttribute(element, "AttackStrength"), location);
+				case "bot":
+					var intelligenceJson = JObject.Parse(element.Attribute("IntelligenceJSON").Value);
+					var intelligence = new BotIntelligenceFactory().Create(intelligenceJson);
+					return new Bot(element.Attribute("Name").Value, ParsingHelper.ParseDoubleAttribute(element, "HP"), ParsingHelper.ParseDoubleAttribute(element, "AttackStrength"), ParsingHelper.ParseDoubleAttribute(element, "AutoDamageStrength"), ParsingHelper.ParseDoubleAttribute(element, "DefenseStrength"), location, ParsingHelper.ParseDirectionAttribute(element, "Direction"), intelligence);
 				default:
 					throw new ArgumentException(string.Format("Неизвестный тип сущности: '{0}'", entityType));
 			}

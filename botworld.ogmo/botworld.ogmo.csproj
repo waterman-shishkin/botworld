@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BotIntelligenceFactory.cs" />
     <Compile Include="EntitiesFactory.cs" />
     <Compile Include="GameScenariosFactory.cs" />
     <Compile Include="LevelSettingsBuilder.cs" />
