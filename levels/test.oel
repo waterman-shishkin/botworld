@@ -27,8 +27,8 @@
     <wall id="24" x="240" y="144" AttackStrength="10" DefenseStrength="10" HP="100" />
     <gem id="25" x="224" y="240" WP="10" />
     <mine id="26" x="192" y="208" AttackStrength="50" />
-    <mine id="27" x="256" y="208" AttackStrength="100" />
-    <mine id="28" x="224" y="208" AttackStrength="10" />
+    <mine id="27" x="256" y="208" AttackStrength="50" />
+    <mine id="28" x="224" y="208" AttackStrength="50" />
     <wall id="29" x="224" y="112" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="30" x="176" y="128" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="31" x="160" y="128" AttackStrength="10" DefenseStrength="10" HP="100" />
@@ -120,7 +120,7 @@
     <wall id="146" x="480" y="176" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="147" x="464" y="192" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="148" x="496" y="192" AttackStrength="10" DefenseStrength="10" HP="100" />
-    <mine id="149" x="480" y="192" AttackStrength="0" />
+    <mine id="149" x="480" y="192" AttackStrength="50" />
     <wall id="150" x="416" y="240" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="151" x="416" y="256" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="152" x="416" y="272" AttackStrength="10" DefenseStrength="10" HP="100" />
@@ -189,13 +189,13 @@
     <wall id="210" x="16" y="64" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="211" x="16" y="48" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="212" x="16" y="32" AttackStrength="10" DefenseStrength="10" HP="100" />
-    <mine id="221" x="80" y="48" AttackStrength="0" />
-    <mine id="222" x="176" y="16" AttackStrength="0" />
-    <mine id="223" x="272" y="432" AttackStrength="0" />
-    <mine id="224" x="288" y="448" AttackStrength="0" />
-    <mine id="228" x="480" y="480" AttackStrength="0" />
-    <mine id="233" x="80" y="480" AttackStrength="0" />
-    <mine id="234" x="64" y="480" AttackStrength="0" />
+    <mine id="221" x="80" y="48" AttackStrength="50" />
+    <mine id="222" x="176" y="16" AttackStrength="50" />
+    <mine id="223" x="272" y="432" AttackStrength="50" />
+    <mine id="224" x="288" y="448" AttackStrength="50" />
+    <mine id="228" x="480" y="480" AttackStrength="50" />
+    <mine id="233" x="80" y="480" AttackStrength="50" />
+    <mine id="234" x="64" y="480" AttackStrength="50" />
     <gem id="238" x="192" y="288" WP="10" />
     <gem id="239" x="240" y="336" WP="10" />
     <gem id="240" x="224" y="64" WP="10" />
@@ -231,15 +231,15 @@
     <wall id="282" x="480" y="144" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="283" x="480" y="64" AttackStrength="10" DefenseStrength="10" HP="100" />
     <gem id="284" x="480" y="80" WP="10" />
-    <mine id="285" x="448" y="80" AttackStrength="0" />
-    <mine id="286" x="464" y="64" AttackStrength="0" />
-    <mine id="287" x="464" y="64" AttackStrength="0" />
-    <mine id="288" x="464" y="80" AttackStrength="0" />
+    <mine id="285" x="448" y="80" AttackStrength="50" />
+    <mine id="286" x="464" y="64" AttackStrength="50" />
+    <mine id="287" x="464" y="64" AttackStrength="50" />
+    <mine id="288" x="464" y="80" AttackStrength="50" />
     <gem id="289" x="288" y="432" WP="10" />
     <gem id="292" x="400" y="384" WP="10" />
     <gem id="293" x="400" y="400" WP="10" />
-    <mine id="294" x="384" y="400" AttackStrength="0" />
-    <mine id="295" x="416" y="400" AttackStrength="0" />
+    <mine id="294" x="384" y="400" AttackStrength="50" />
+    <mine id="295" x="416" y="400" AttackStrength="50" />
     <wall id="296" x="32" y="144" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="297" x="64" y="144" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="298" x="32" y="176" AttackStrength="10" DefenseStrength="10" HP="100" />
@@ -249,11 +249,11 @@
     <wall id="302" x="32" y="224" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="303" x="64" y="224" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="304" x="48" y="240" AttackStrength="10" DefenseStrength="10" HP="100" />
-    <mine id="305" x="48" y="224" AttackStrength="0" />
+    <mine id="305" x="48" y="224" AttackStrength="50" />
     <gem id="306" x="32" y="160" WP="10" />
     <gem id="307" x="64" y="160" WP="10" />
     <gem id="308" x="16" y="208" WP="10" />
-    <mine id="309" x="80" y="208" AttackStrength="0" />
+    <mine id="309" x="80" y="208" AttackStrength="50" />
     <wall id="310" x="16" y="192" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="311" x="0" y="192" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="312" x="0" y="208" AttackStrength="10" DefenseStrength="10" HP="100" />
@@ -303,7 +303,7 @@
     <wall id="358" x="352" y="160" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="359" x="368" y="128" AttackStrength="10" DefenseStrength="10" HP="100" />
     <gem id="360" x="336" y="32" WP="10" />
-    <mine id="361" x="336" y="16" AttackStrength="0" />
+    <mine id="361" x="336" y="16" AttackStrength="50" />
     <gem id="363" x="240" y="16" WP="10" />
     <gem id="364" x="384" y="96" WP="10" />
     <wall id="365" x="256" y="112" AttackStrength="10" DefenseStrength="10" HP="100" />
@@ -336,8 +336,8 @@
     <gem id="391" x="256" y="272" WP="10" />
     <gem id="392" x="240" y="288" WP="10" />
     <gem id="393" x="256" y="288" WP="10" />
-    <mine id="394" x="208" y="272" AttackStrength="0" />
-    <mine id="395" x="256" y="256" AttackStrength="0" />
+    <mine id="394" x="208" y="272" AttackStrength="50" />
+    <mine id="395" x="256" y="256" AttackStrength="50" />
     <wall id="396" x="304" y="304" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="397" x="304" y="288" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="398" x="304" y="256" AttackStrength="10" DefenseStrength="10" HP="100" />
@@ -355,7 +355,7 @@
     <wall id="410" x="352" y="272" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="411" x="384" y="256" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="412" x="384" y="272" AttackStrength="10" DefenseStrength="10" HP="100" />
-    <mine id="413" x="368" y="272" AttackStrength="0" />
+    <mine id="413" x="368" y="272" AttackStrength="50" />
     <gem id="414" x="368" y="256" WP="10" />
     <wall id="415" x="400" y="288" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="416" x="336" y="288" AttackStrength="10" DefenseStrength="10" HP="100" />
@@ -370,18 +370,18 @@
     <wall id="425" x="112" y="176" AttackStrength="10" DefenseStrength="10" HP="100" />
     <gem id="426" x="96" y="144" WP="10" />
     <gem id="427" x="96" y="176" WP="10" />
-    <mine id="428" x="80" y="144" AttackStrength="0" />
-    <mine id="429" x="80" y="176" AttackStrength="0" />
+    <mine id="428" x="80" y="144" AttackStrength="50" />
+    <mine id="429" x="80" y="176" AttackStrength="50" />
     <wall id="430" x="128" y="192" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="431" x="160" y="192" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="432" x="176" y="176" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="433" x="176" y="160" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="434" x="144" y="160" AttackStrength="10" DefenseStrength="10" HP="100" />
-    <mine id="435" x="192" y="160" AttackStrength="0" />
+    <mine id="435" x="192" y="160" AttackStrength="50" />
     <gem id="436" x="192" y="144" WP="10" />
     <gem id="437" x="144" y="192" WP="10" />
-    <mine id="438" x="144" y="144" AttackStrength="0" />
-    <mine id="439" x="128" y="144" AttackStrength="0" />
+    <mine id="438" x="144" y="144" AttackStrength="50" />
+    <mine id="439" x="128" y="144" AttackStrength="50" />
     <wall id="440" x="128" y="240" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="441" x="224" y="352" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="442" x="208" y="368" AttackStrength="10" DefenseStrength="10" HP="100" />
@@ -398,16 +398,16 @@
     <wall id="453" x="32" y="304" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="454" x="0" y="304" AttackStrength="10" DefenseStrength="10" HP="100" />
     <gem id="457" x="32" y="288" WP="10" />
-    <mine id="458" x="32" y="240" AttackStrength="0" />
-    <mine id="459" x="48" y="16" AttackStrength="0" />
-    <mine id="460" x="304" y="112" AttackStrength="0" />
-    <mine id="461" x="288" y="48" AttackStrength="0" />
+    <mine id="458" x="32" y="240" AttackStrength="50" />
+    <mine id="459" x="48" y="16" AttackStrength="50" />
+    <mine id="460" x="304" y="112" AttackStrength="50" />
+    <mine id="461" x="288" y="48" AttackStrength="50" />
     <wall id="462" x="160" y="240" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="463" x="160" y="256" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="464" x="160" y="288" AttackStrength="10" DefenseStrength="10" HP="100" />
     <gem id="465" x="176" y="256" WP="10" />
     <gem id="466" x="192" y="256" WP="10" />
-    <mine id="467" x="176" y="240" AttackStrength="0" />
+    <mine id="467" x="176" y="240" AttackStrength="50" />
     <wall id="468" x="96" y="240" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="469" x="80" y="256" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="470" x="64" y="272" AttackStrength="10" DefenseStrength="10" HP="100" />
@@ -417,7 +417,7 @@
     <wall id="474" x="96" y="304" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="475" x="128" y="256" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="476" x="112" y="272" AttackStrength="10" DefenseStrength="10" HP="100" />
-    <mine id="477" x="112" y="240" AttackStrength="0" />
+    <mine id="477" x="112" y="240" AttackStrength="50" />
     <gem id="478" x="112" y="256" WP="10" />
     <wall id="479" x="16" y="320" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="480" x="16" y="320" AttackStrength="10" DefenseStrength="10" HP="100" />
@@ -440,15 +440,15 @@
     <gem id="500" x="16" y="368" WP="10" />
     <gem id="501" x="16" y="368" WP="10" />
     <gem id="502" x="16" y="384" WP="10" />
-    <mine id="503" x="16" y="352" AttackStrength="0" />
+    <mine id="503" x="16" y="352" AttackStrength="50" />
     <wall id="504" x="16" y="400" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="505" x="16" y="416" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="506" x="64" y="352" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="507" x="64" y="336" AttackStrength="10" DefenseStrength="10" HP="100" />
     <gem id="508" x="48" y="320" WP="10" />
     <gem id="509" x="48" y="336" WP="10" />
-    <mine id="510" x="32" y="320" AttackStrength="0" />
-    <mine id="511" x="48" y="352" AttackStrength="0" />
+    <mine id="510" x="32" y="320" AttackStrength="50" />
+    <mine id="511" x="48" y="352" AttackStrength="50" />
     <wall id="512" x="96" y="336" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="513" x="112" y="320" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="514" x="96" y="368" AttackStrength="10" DefenseStrength="10" HP="100" />
@@ -464,7 +464,7 @@
     <gem id="524" x="192" y="336" WP="10" />
     <gem id="525" x="192" y="352" WP="10" />
     <gem id="526" x="208" y="352" WP="10" />
-    <mine id="527" x="192" y="368" AttackStrength="0" />
+    <mine id="527" x="192" y="368" AttackStrength="50" />
     <wall id="528" x="96" y="400" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="532" x="160" y="432" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="533" x="176" y="448" AttackStrength="10" DefenseStrength="10" HP="100" />
@@ -480,13 +480,13 @@
     <gem id="540" x="192" y="400" WP="10" />
     <gem id="541" x="208" y="400" WP="10" />
     <gem id="542" x="208" y="384" WP="10" />
-    <mine id="543" x="176" y="432" AttackStrength="0" />
+    <mine id="543" x="176" y="432" AttackStrength="50" />
     <wall id="544" x="352" y="176" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="545" x="384" y="176" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="546" x="320" y="400" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="547" x="224" y="448" AttackStrength="10" DefenseStrength="10" HP="100" />
     <gem id="548" x="368" y="176" WP="10" />
-    <mine id="164" x="448" y="400" AttackStrength="0" />
+    <mine id="164" x="448" y="400" AttackStrength="50" />
     <wall id="107" x="496" y="0" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="110" x="496" y="16" AttackStrength="10" DefenseStrength="10" HP="100" />
     <wall id="111" x="496" y="32" AttackStrength="10" DefenseStrength="10" HP="100" />
@@ -566,7 +566,7 @@
     <gem id="226" x="368" y="464" WP="10" />
     <gem id="564" x="368" y="448" WP="10" />
     <gem id="565" x="352" y="448" WP="10" />
-    <mine id="566" x="320" y="448" AttackStrength="0" />
-    <mine id="567" x="368" y="432" AttackStrength="0" />
+    <mine id="566" x="320" y="448" AttackStrength="50" />
+    <mine id="567" x="368" y="432" AttackStrength="50" />
   </Entities>
 </level>
