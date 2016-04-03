@@ -43,7 +43,7 @@ namespace botworld.ogmo.tests
 			var projectDoc = XDocument.Parse(project);
 
 			const string level =
-				@"<level width='512' height='640' ScenarioJSON='{&#xD;&#xA;	&quot;type&quot;: &quot;points&quot;,&#xD;&#xA;	&quot;wp&quot;: 20&#xD;&#xA;}'>
+				@"<level width='512' height='640' ScenarioJSON='{&#xD;&#xA;	&quot;type&quot;: &quot;points&quot;,&#xD;&#xA;	&quot;wp&quot;: 20&#xD;&#xA;}' Title='Test'>
 					<Entities>
 						<wall x='208' y='176' AttackStrength='10' DefenseStrength='20' HP='100' />
 						<gem x='224' y='240' WP='10' />
@@ -58,6 +58,7 @@ namespace botworld.ogmo.tests
 			Assert.That(settings.BackgroundColor, Is.EqualTo(Color.FromArgb(255, 192, 192, 192)));
 			Assert.That(settings.CellSize, Is.EqualTo(16));
 			Assert.That(settings.EntitiesImageFilenames, Is.EqualTo(new Dictionary<string, string> { { "wall", "wall.png" }, { "gem", "gem.png" }, { "mine", "mine.png" }, { "bot", "bot.png" } }));
+			Assert.That(settings.Title, Is.EqualTo("Test"));
 			Assert.That(settings.Width, Is.EqualTo(32));
 			Assert.That(settings.Height, Is.EqualTo(40));
 			Assert.That(settings.Scenario, Is.TypeOf<PointsScenario>());

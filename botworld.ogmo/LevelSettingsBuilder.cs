@@ -40,6 +40,7 @@ namespace botworld.ogmo
 				e => e.Element("ImageDefinition").Attribute("ImagePath").Value);
 
 			var levelElement = level.XPathSelectElement(@"level");
+			var title = levelElement.Attribute("Title").Value;
 			var widthPixels = ParsingHelper.ParseIntAttribute(levelElement, "width");
 			var width = widthPixels / cellWidth;
 			if (widthPixels != width * cellWidth)
@@ -56,7 +57,7 @@ namespace botworld.ogmo
 			var entitiesFactory = new EntitiesFactory(cellWidth);
 			var entities = entitiesElements.Select(entitiesFactory.Create);
 
-			return new LevelSettings(width, height, cellWidth, backgroundColor, imageFilenames, scenario, entities);
+			return new LevelSettings(title, width, height, cellWidth, backgroundColor, imageFilenames, scenario, entities);
 		}
 	}
 }
