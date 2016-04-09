@@ -33,8 +33,8 @@ namespace botworld.game
 				var gameLoader = new GameLoader();
 				var game = gameLoader.Load(projectFilePath, levelFilePath);
 				var levelSettings = gameLoader.LevelSettings;
-				var gameView = new GameView("Botworld: " + levelSettings.Title, levelSettings.Width, levelSettings.Height, levelSettings.CellSize,
-					levelSettings.BackgroundColor, levelSettings.EntitiesImageFilenames, game);
+				var gameView = new GameView("Botworld: " + levelSettings.Title, game, levelSettings.CellSize,
+					levelSettings.BackgroundColor, levelSettings.EntitiesImageFilenames, levelsDirPath);
 				gameView.Start();
 			}
 			catch (Exception e)

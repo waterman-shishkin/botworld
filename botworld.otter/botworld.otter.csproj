@@ -41,7 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WallView.cs" />
+    <Compile Include="GemView.cs" />
+    <Compile Include="MineView.cs" />
+    <Compile Include="BotView.cs" />
+    <Compile Include="EntitiesViewFactory.cs" />
     <Compile Include="GameView.cs" />
+    <Compile Include="MapView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
