@@ -70,10 +70,8 @@ namespace botworld.bl.tests
 		{
 			var botIntelligence = Substitute.For<IBotIntelligence>();
 			var bot = new Bot("Angry bot", 100, 5, 0, 3, new Location(2, 4), Direction.North, botIntelligence);
-			var entity1 = Substitute.For<IEntity>();
-			entity1.IsCollectable.Returns(true);
-			var entity2 = Substitute.For<IEntity>();
-			entity2.IsCollectable.Returns(true);
+			var entity1 = Substitute.For<IEntity, ICollectable>();
+			var entity2 = Substitute.For<IEntity, ICollectable>();
 
 			bot.Collect(entity1);
 			bot.Collect(entity2);
@@ -86,8 +84,7 @@ namespace botworld.bl.tests
 		{
 			var botIntelligence = Substitute.For<IBotIntelligence>();
 			var bot = new Bot("Angry bot", 100, 5, 0, 3, new Location(2, 4), Direction.North, botIntelligence);
-			var entity = Substitute.For<IEntity>();
-			entity.IsCollectable.Returns(true);
+			var entity = Substitute.For<IEntity, ICollectable>();
 
 			bot.Collect(entity);
 
@@ -100,7 +97,6 @@ namespace botworld.bl.tests
 			var botIntelligence = Substitute.For<IBotIntelligence>();
 			var bot = new Bot("Angry bot", 100, 5, 0, 3, new Location(2, 4), Direction.North, botIntelligence);
 			var entity = Substitute.For<IEntity>();
-			entity.IsCollectable.Returns(false);
 
 			var action = new TestDelegate(() => bot.Collect(entity));
 
@@ -112,7 +108,7 @@ namespace botworld.bl.tests
 		{
 			var botIntelligence = Substitute.For<IBotIntelligence>();
 			var bot = new Bot("Angry bot", 100, 5, 0, 3, new Location(2, 4), Direction.North, botIntelligence);
-			var info = new[] { new EntityInfo(EntityType.Gem, 1, 0, 0, 0, new Location(2, 4), true, true, 100), new EntityInfo(EntityType.Mine, 1, 100, 0, 0, new Location(2, 4), true, false, 0) };
+			var info = new[] { new EntityInfo(EntityType.Gem, 1, 0, 0, 0, new Location(2, 4), true, true, false, 100), new EntityInfo(EntityType.Mine, 1, 100, 0, 0, new Location(2, 4), true, false, false, 0) };
 
 			bot.OnExplore(info);
 
@@ -218,14 +214,6 @@ namespace botworld.bl.tests
 			var bot = new Bot("Angry bot", 100, 5, 0, 3, new Location(2, 4), Direction.North, null);
 
 			Assert.That(bot.CanShareCell, Is.True);
-		}
-
-		[Test]
-		public void IsCollectable_Returns_False()
-		{
-			var bot = new Bot("Angry bot", 100, 5, 0, 3, new Location(2, 4), Direction.North, null);
-
-			Assert.That(bot.IsCollectable, Is.False);
 		}
 
 		[Test]
@@ -395,6 +383,114 @@ namespace botworld.bl.tests
 				actions.Add(bot.ChooseAttackResponseAction(Substitute.For<IEntity>()));
 
 			Assert.That(actions.ToArray(), Is.EqualTo(expectedActions));
+		}
+
+		[Test]
+		public void ImpactDamage_ForZeroDamage_DoNotTriggerEvent()
+		{
+			var eventCounter = 0;
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 0, 3, new Location(2, 4), Direction.North, botIntelligence);
+			bot.OnStateChange += (sender, args) => eventCounter++;
+
+			bot.ImpactDamage(0);
+
+			Assert.That(eventCounter, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void ImpactDamage_ForNonZeroDamage_TriggersEvent()
+		{
+			var eventCounter = 0;
+			EntityEventArgs eventArgs = null;
+			object eventSender = null;
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 0, 3, new Location(2, 4), Direction.North, botIntelligence);
+			bot.OnStateChange += (sender, args) =>
+			{
+				eventCounter++;
+				eventSender = sender;
+				eventArgs = args;
+			};
+
+			bot.ImpactDamage(25);
+
+			Assert.That(eventCounter, Is.EqualTo(1));
+			Assert.That(eventSender, Is.EqualTo(bot));
+			Assert.That(eventArgs.PreviousStateInfo.HP, Is.EqualTo(100));
+			Assert.That(eventArgs.CurrentStateInfo.HP, Is.EqualTo(75));
+		}
+
+		[Test]
+		public void UpdateDirection_ForSameDirection_DoNotTriggerEvent()
+		{
+			var eventCounter = 0;
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 0, 3, new Location(2, 4), Direction.North, botIntelligence);
+			bot.OnStateChange += (sender, args) => eventCounter++;
+
+			bot.UpdateDirection(Direction.North);
+
+			Assert.That(eventCounter, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void UpdateDirection_ForNewDirection_TriggersEvent()
+		{
+			var eventCounter = 0;
+			EntityEventArgs eventArgs = null;
+			object eventSender = null;
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 0, 3, new Location(2, 4), Direction.North, botIntelligence);
+			bot.OnStateChange += (sender, args) =>
+			{
+				eventCounter++;
+				eventSender = sender;
+				eventArgs = args;
+			};
+
+			bot.UpdateDirection(Direction.South);
+
+			Assert.That(eventCounter, Is.EqualTo(1));
+			Assert.That(eventSender, Is.EqualTo(bot));
+			Assert.That(((BotInfo)eventArgs.PreviousStateInfo).Direction, Is.EqualTo(Direction.North));
+			Assert.That(((BotInfo)eventArgs.CurrentStateInfo).Direction, Is.EqualTo(Direction.South));
+		}
+
+		[Test]
+		public void UpdateLocation_ForSameLocation_DoNotTriggerEvent()
+		{
+			var eventCounter = 0;
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 0, 3, new Location(2, 4), Direction.North, botIntelligence);
+			bot.OnStateChange += (sender, args) => eventCounter++;
+
+			bot.UpdateLocation(new Location(2, 4));
+
+			Assert.That(eventCounter, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void UpdateLocation_ForNewLocation_TriggersEvent()
+		{
+			var eventCounter = 0;
+			EntityEventArgs eventArgs = null;
+			object eventSender = null;
+			var botIntelligence = Substitute.For<IBotIntelligence>();
+			var bot = new Bot("Angry bot", 100, 5, 0, 3, new Location(2, 4), Direction.North, botIntelligence);
+			bot.OnStateChange += (sender, args) =>
+			{
+				eventCounter++;
+				eventSender = sender;
+				eventArgs = args;
+			};
+
+			bot.UpdateLocation(new Location(2, 3));
+
+			Assert.That(eventCounter, Is.EqualTo(1));
+			Assert.That(eventSender, Is.EqualTo(bot));
+			Assert.That(eventArgs.PreviousStateInfo.Location, Is.EqualTo(new Location(2, 4)));
+			Assert.That(eventArgs.CurrentStateInfo.Location, Is.EqualTo(new Location(2, 3)));
 		}
 	}
 }

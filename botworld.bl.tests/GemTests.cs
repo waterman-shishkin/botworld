@@ -39,14 +39,6 @@ namespace botworld.bl.tests
 		}
 
 		[Test]
-		public void IsCollectable_Returns_True()
-		{
-			var gem = new Gem(100, new Location(2, 4));
-
-			Assert.That(gem.IsCollectable, Is.True);
-		}
-
-		[Test]
 		public void AttackStrength_Returns_Zero()
 		{
 			var gem = new Gem(100, new Location(2, 4));
@@ -127,6 +119,93 @@ namespace botworld.bl.tests
 			var action = gem.ChooseAttackResponseAction(null);
 
 			Assert.That(action, Is.EqualTo(AttackResponseAction.None));
+		}
+
+		[Test]
+		public void ImpactDamage_ForZeroDamage_DoNotTriggerEvent()
+		{
+			var eventCounter = 0;
+			var gem = new Gem(100, new Location(2, 4));
+			gem.OnStateChange += (sender, args) => eventCounter++;
+
+			gem.ImpactDamage(0);
+
+			Assert.That(eventCounter, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void ImpactDamage_ForNonZeroDamage_TriggersEvent()
+		{
+			var eventCounter = 0;
+			EntityEventArgs eventArgs = null;
+			object eventSender = null;
+			var gem = new Gem(100, new Location(2, 4));
+			gem.OnStateChange += (sender, args) =>
+			{
+				eventCounter++;
+				eventSender = sender;
+				eventArgs = args;
+			};
+
+			gem.ImpactDamage(25);
+
+			Assert.That(eventCounter, Is.EqualTo(1));
+			Assert.That(eventSender, Is.EqualTo(gem));
+			Assert.That(eventArgs.PreviousStateInfo.HP, Is.EqualTo(1));
+			Assert.That(eventArgs.CurrentStateInfo.HP, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void IsCollected_ForJustCreatedGem_ReturnsFalse()
+		{
+			var gem = new Gem(100, new Location(2, 4));
+
+			Assert.That(gem.IsCollected, Is.False);
+		}
+
+		[Test]
+		public void IsCollected_ForCollectedGem_ReturnsTrue()
+		{
+			var gem = new Gem(100, new Location(2, 4));
+
+			gem.OnCollected();
+
+			Assert.That(gem.IsCollected, Is.True);
+		}
+
+		[Test]
+		public void OnCollected_CalledOnce_TriggersEvent()
+		{
+			var eventCounter = 0;
+			EntityEventArgs eventArgs = null;
+			object eventSender = null;
+			var gem = new Gem(100, new Location(2, 4));
+			gem.OnStateChange += (sender, args) =>
+			{
+				eventCounter++;
+				eventSender = sender;
+				eventArgs = args;
+			};
+
+			gem.OnCollected();
+
+			Assert.That(eventCounter, Is.EqualTo(1));
+			Assert.That(eventSender, Is.EqualTo(gem));
+			Assert.That(eventArgs.PreviousStateInfo.IsCollected, Is.False);
+			Assert.That(eventArgs.CurrentStateInfo.IsCollected, Is.True);
+		}
+
+		[Test]
+		public void OnCollected_CalledTwice_TriggersEventOnce()
+		{
+			var eventCounter = 0;
+			var gem = new Gem(100, new Location(2, 4));
+			gem.OnStateChange += (sender, args) => eventCounter++;
+
+			gem.OnCollected();
+			gem.OnCollected();
+
+			Assert.That(eventCounter, Is.EqualTo(1));
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace botworld.bl.tests
 {
@@ -36,14 +37,6 @@ namespace botworld.bl.tests
 			var wall = new Wall(100, 10, 10, new Location(2, 4));
 
 			Assert.That(wall.CanShareCell, Is.False);
-		}
-
-		[Test]
-		public void IsCollectable_Returns_False()
-		{
-			var wall = new Wall(100, 10, 10, new Location(2, 4));
-
-			Assert.That(wall.IsCollectable, Is.False);
 		}
 
 		[Test]
@@ -139,6 +132,40 @@ namespace botworld.bl.tests
 			var action = wall.ChooseAttackResponseAction(null);
 
 			Assert.That(action, Is.EqualTo(AttackResponseAction.None));
+		}
+
+		[Test]
+		public void ImpactDamage_ForZeroDamage_DoNotTriggerEvent()
+		{
+			var eventCounter = 0;
+			var wall = new Wall(100, 10, 10, new Location(2, 4));
+			wall.OnStateChange += (sender, args) => eventCounter++;
+
+			wall.ImpactDamage(0);
+
+			Assert.That(eventCounter, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void ImpactDamage_ForNonZeroDamage_TriggersEvent()
+		{
+			var eventCounter = 0;
+			EntityEventArgs eventArgs = null;
+			object eventSender = null;
+			var wall = new Wall(100, 10, 10, new Location(2, 4));
+			wall.OnStateChange += (sender, args) =>
+			{
+				eventCounter++;
+				eventSender = sender;
+				eventArgs = args;
+			};
+
+			wall.ImpactDamage(25);
+
+			Assert.That(eventCounter, Is.EqualTo(1));
+			Assert.That(eventSender, Is.EqualTo(wall));
+			Assert.That(eventArgs.PreviousStateInfo.HP, Is.EqualTo(100));
+			Assert.That(eventArgs.CurrentStateInfo.HP, Is.EqualTo(75));
 		}
 	}
 }

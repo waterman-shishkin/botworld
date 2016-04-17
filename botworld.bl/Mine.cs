@@ -1,57 +1,24 @@
 namespace botworld.bl
 {
-	public class Mine : IEntity
+	public class Mine : BaseEntity
 	{
 		public Mine(double attackStrength, Location location)
+			: base(EntityType.Mine, location, false, 1, attackStrength, 1, 0)
 		{
-			HP = 1;
-			AttackStrength = attackStrength;
-			Location = location;
 		}
 
-		public EntityType Type
-		{
-			get { return EntityType.Mine; }
-		}
-
-		public Location Location { get; private set; }
-
-		public bool CanShareCell
-		{
-			get { return false; }
-		}
-
-		public bool IsCollectable
-		{
-			get { return false; }
-		}
-
-		public bool IsDead
-		{
-			get { return HP <= 0; }
-		}
-
-		public double HP { get; private set; }
-
-		public double AttackStrength { get; private set; }
-
-		public double AutoDamageStrength { get { return 1; } }
-
-		public double DefenseStrength { get { return 0; } }
-
-		public bool ImpactDamage(double damage)
+		protected override void ImpactDamageInternal(double damage)
 		{
 			if (damage > 0)
 				HP = 0;
-			return IsDead;
 		}
 
-		public InvasionResponseAction ChooseInvasionResponseAction(IEntity guest)
+		public override InvasionResponseAction ChooseInvasionResponseAction(IEntity guest)
 		{
 			return InvasionResponseAction.Attack;
 		}
 
-		public AttackResponseAction ChooseAttackResponseAction(IEntity guest)
+		public override AttackResponseAction ChooseAttackResponseAction(IEntity guest)
 		{
 			return AttackResponseAction.None;
 		}

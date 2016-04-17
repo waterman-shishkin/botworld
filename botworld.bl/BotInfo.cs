@@ -3,7 +3,7 @@
 	public class BotInfo : EntityInfo
 	{
 		public BotInfo(double hp, double attackStrength, double autoDamageStrength, double defenseStrength, Location location, int wp, Direction direction)
-			: base(EntityType.Bot, hp, attackStrength, autoDamageStrength, defenseStrength, location, true, false, wp)
+			: base(EntityType.Bot, hp, attackStrength, autoDamageStrength, defenseStrength, location, true, false, false, wp)
 		{
 			Direction = direction;
 		}

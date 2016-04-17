@@ -12,6 +12,7 @@ namespace botworld.bl
 		int UpdateWP(int wpDiff);
 		BotAction ChooseNextAction(Dictionary<Location, IEnumerable<EntityInfo>> neighborsInfo);
 		void Collect(IEntity entity);
+		BotInfo PrepareBotInfo();
 		void OnExplore(IEnumerable<EntityInfo> info);
 	}
 }

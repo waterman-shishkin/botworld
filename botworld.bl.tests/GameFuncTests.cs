@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -541,6 +542,7 @@ namespace botworld.bl.tests
 
 			Assert.That(bot1.WP, Is.EqualTo(300));
 			Assert.That(bot1.CollectedEntities, Is.EqualTo(new [] { gem1, gem2 }));
+			Assert.That(bot1.CollectedEntities.Cast<ICollectable>().All(e => e.IsCollected), Is.True);
 			Assert.That(bot2.WP, Is.EqualTo(0));
 			Assert.That(bot3.WP, Is.EqualTo(0));
 		}

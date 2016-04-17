@@ -31,14 +31,6 @@ namespace botworld.bl.tests
 		}
 
 		[Test]
-		public void IsCollectable_Returns_False()
-		{
-			var mine = new Mine(100, new Location(2, 4));
-
-			Assert.That(mine.IsCollectable, Is.False);
-		}
-
-		[Test]
 		public void AttackStrength_Returns_AttackStrengthSetByConstructor()
 		{
 			var mine = new Mine(100, new Location(2, 4));
@@ -118,6 +110,40 @@ namespace botworld.bl.tests
 			var action = mine.ChooseAttackResponseAction(null);
 
 			Assert.That(action, Is.EqualTo(AttackResponseAction.None));
+		}
+
+		[Test]
+		public void ImpactDamage_ForZeroDamage_DoNotTriggerEvent()
+		{
+			var eventCounter = 0;
+			var mine = new Mine(100, new Location(2, 4));
+			mine.OnStateChange += (sender, args) => eventCounter++;
+
+			mine.ImpactDamage(0);
+
+			Assert.That(eventCounter, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void ImpactDamage_ForNonZeroDamage_TriggersEvent()
+		{
+			var eventCounter = 0;
+			EntityEventArgs eventArgs = null;
+			object eventSender = null;
+			var mine = new Mine(100, new Location(2, 4));
+			mine.OnStateChange += (sender, args) =>
+			{
+				eventCounter++;
+				eventSender = sender;
+				eventArgs = args;
+			};
+
+			mine.ImpactDamage(25);
+
+			Assert.That(eventCounter, Is.EqualTo(1));
+			Assert.That(eventSender, Is.EqualTo(mine));
+			Assert.That(eventArgs.PreviousStateInfo.HP, Is.EqualTo(1));
+			Assert.That(eventArgs.CurrentStateInfo.HP, Is.EqualTo(0));
 		}
 	}
 }

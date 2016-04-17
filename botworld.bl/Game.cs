@@ -28,6 +28,9 @@ namespace botworld.bl
 
 		public bool Tick()
 		{
+			if (GameOver)
+				return true;
+
 			foreach (var bot in Map.GetBots().ToArray())
 			{
 				if (bot.IsDead)
@@ -120,9 +123,10 @@ namespace botworld.bl
 
 		private void ProceedCollectAction(IBot bot)
 		{
-			var collectableEntities = Map.GetEntities(bot.Location).Where(e => e != bot && e.IsCollectable).ToArray();
+			var collectableEntities = Map.GetEntities(bot.Location).Where(e => e != bot && e is ICollectable).ToArray();
 			foreach (var entity in collectableEntities)
 			{
+				((ICollectable)entity).OnCollected();
 				Map.Remove(entity);
 				bot.Collect(entity);
 				var pointsProvider = entity as IPointsProvider;

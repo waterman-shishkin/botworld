@@ -1,61 +1,42 @@
 namespace botworld.bl
 {
-	public class Gem : IEntity, IPointsProvider
+	public class Gem : BaseEntity, ICollectable, IPointsProvider
 	{
 		public Gem(int wp, Location location)
+			: base(EntityType.Gem, location, true, 1, 0, 0, 0)
 		{
-			HP = 1;
 			WP = wp;
-			Location = location;
 		}
-
-		public EntityType Type
-		{
-			get { return EntityType.Gem; }
-		}
-
-		public Location Location { get; private set; }
-
-		public bool CanShareCell
-		{
-			get { return true; }
-		}
-
-		public bool IsCollectable
-		{
-			get { return true; }
-		}
-
-		public bool IsDead
-		{
-			get { return HP <= 0; }
-		}
-
-		public double HP { get; private set; }
-
-		public double AttackStrength { get { return 0; } }
-
-		public double AutoDamageStrength { get { return 0; } }
-
-		public double DefenseStrength { get { return 0; } }
 
 		public int WP { get; private set; }
 
-		public bool ImpactDamage(double damage)
+		protected override void ImpactDamageInternal(double damage)
 		{
 			if (damage > 0)
 				HP = 0;
-			return IsDead;
 		}
 
-		public InvasionResponseAction ChooseInvasionResponseAction(IEntity guest)
+		public override InvasionResponseAction ChooseInvasionResponseAction(IEntity guest)
 		{
 			return InvasionResponseAction.None;
 		}
 
-		public AttackResponseAction ChooseAttackResponseAction(IEntity guest)
+		public override AttackResponseAction ChooseAttackResponseAction(IEntity guest)
 		{
 			return AttackResponseAction.None;
+		}
+
+		public override EntityInfo PrepareEntityInfo()
+		{
+			return new EntityInfo(Type, HP, AttackStrength, AutoDamageStrength, DefenseStrength, Location, CanShareCell, true, IsCollected, WP);
+		}
+
+		public bool IsCollected { get; private set; }
+
+		public void OnCollected()
+		{
+			if (!IsCollected)
+				ProceedStateChange(() => IsCollected = true);
 		}
 	}
 }

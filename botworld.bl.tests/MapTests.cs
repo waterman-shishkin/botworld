@@ -897,9 +897,9 @@ namespace botworld.bl.tests
 			bot.CanShareCell.Returns(true);
 			map.Add(bot);
 			var locations = new[] {location, new Location(1, 4), new Location(2, 5), new Location(2, 3)};
-			var expectedInfos = new[] {new List<EntityInfo> {new EntityInfo(EntityType.Gem, 10, 10, 10, 10, locations[0], true, true, 10), new BotInfo(10, 10, 10, 10, locations[0], 10, Direction.North )}, 
-										new List<EntityInfo> {new EntityInfo(EntityType.Mine, 20, 20, 20, 20, locations[1], true, false, 0), new BotInfo(20, 20, 20, 20, locations[1], 20, Direction.South)}, 
-										new List<EntityInfo> {new EntityInfo(EntityType.Wall, 30, 30, 30, 30, locations[2], false, false, 0)}, 
+			var expectedInfos = new[] {new List<EntityInfo> {new EntityInfo(EntityType.Gem, 10, 10, 10, 10, locations[0], true, true, false, 10), new BotInfo(10, 10, 10, 10, locations[0], 10, Direction.North )}, 
+										new List<EntityInfo> {new EntityInfo(EntityType.Mine, 20, 20, 20, 20, locations[1], true, false, false, 0), new BotInfo(20, 20, 20, 20, locations[1], 20, Direction.South)}, 
+										new List<EntityInfo> {new EntityInfo(EntityType.Wall, 30, 30, 30, 30, locations[2], false, false, false, 0)}, 
 										new List<EntityInfo>()};
 
 			foreach (var entity in expectedInfos.SelectMany(l => l).Select(CreateEntity))
@@ -948,8 +948,8 @@ namespace botworld.bl.tests
 			bot.CanShareCell.Returns(true);
 			map.Add(bot);
 			var locations = new[] {location, new Location(1, 0), new Location(0, 1)};
-			var expectedInfos = new [] {new List<EntityInfo> {new EntityInfo(EntityType.Gem, 10, 10, 10, 10, locations[0], true, true, 10), new BotInfo(10, 10, 10, 10, locations[0], 10, Direction.North )}, 
-										new List<EntityInfo> {new EntityInfo(EntityType.Mine, 20, 20, 20, 20, locations[1], true, false, 0)}, 
+			var expectedInfos = new [] {new List<EntityInfo> {new EntityInfo(EntityType.Gem, 10, 10, 10, 10, locations[0], true, true, false, 10), new BotInfo(10, 10, 10, 10, locations[0], 10, Direction.North )}, 
+										new List<EntityInfo> {new EntityInfo(EntityType.Mine, 20, 20, 20, 20, locations[1], true, false, false, 0)}, 
 										new List<EntityInfo>()};
 
 			foreach (var entity in expectedInfos.SelectMany(l => l).Select(CreateEntity))
@@ -996,8 +996,8 @@ namespace botworld.bl.tests
 			bot.CanShareCell.Returns(true);
 			map.Add(bot);
 			var locations = new[] {location, new Location(8, 19), new Location(9, 18)};
-			var expectedInfos = new [] {new List<EntityInfo> {new EntityInfo(EntityType.Gem, 10, 10, 10, 10, locations[0], true, true, 10), new BotInfo(10, 10, 10, 10, locations[0], 10, Direction.North )}, 
-										new List<EntityInfo> {new EntityInfo(EntityType.Mine, 20, 20, 20, 20, locations[1], true, false, 0)}, 
+			var expectedInfos = new[] {new List<EntityInfo> {new EntityInfo(EntityType.Gem, 10, 10, 10, 10, locations[0], true, true, false, 10), new BotInfo(10, 10, 10, 10, locations[0], 10, Direction.North )}, 
+										new List<EntityInfo> {new EntityInfo(EntityType.Mine, 20, 20, 20, 20, locations[1], true, false, false, 0)}, 
 										new List<EntityInfo>()};
 
 			foreach (var entity in expectedInfos.SelectMany(l => l).Select(CreateEntity))
@@ -1036,18 +1036,19 @@ namespace botworld.bl.tests
 
 		private static IEntity CreateEntity(EntityInfo entityInfo)
 		{
-			var entity = entityInfo.Type == EntityType.Bot ? Substitute.For<IBot>() : entityInfo.WP != 0 ? Substitute.For<IEntity, IPointsProvider>() : Substitute.For<IEntity>();
+			var entity = entityInfo.Type == EntityType.Bot ? Substitute.For<IBot>() : entityInfo.WP != 0 ? Substitute.For<IEntity, ICollectable, IPointsProvider>() : Substitute.For<IEntity>();
 			entity.Type.Returns(entityInfo.Type);
 			entity.HP.Returns(entityInfo.HP);
 			entity.AttackStrength.Returns(entityInfo.AttackStrength);
 			entity.DefenseStrength.Returns(entityInfo.DefenseStrength);
 			entity.Location.Returns(entityInfo.Location);
 			entity.CanShareCell.Returns(entityInfo.CanShareCell);
-			entity.IsCollectable.Returns(entityInfo.IsCollectable);
+			entity.PrepareEntityInfo().Returns(entityInfo);
 			if (entityInfo.Type == EntityType.Bot)
 			{
 				((IBot)entity).WP.Returns(entityInfo.WP);
 				((IBot)entity).Direction.Returns(((BotInfo)entityInfo).Direction);
+				((IBot)entity).PrepareBotInfo().Returns(entityInfo);
 			}
 			else if (entityInfo.WP != 0)
 				((IPointsProvider)entity).WP.Returns(entityInfo.WP);
@@ -1080,7 +1081,7 @@ namespace botworld.bl.tests
 			bot.Direction.Returns(Direction.West);
 			map.Add(bot);
 			var location = new Location(1, 4);
-			var expectedInfos = new List<EntityInfo> {new EntityInfo(EntityType.Gem, 10, 10, 10, 10, location, true, true, 10), new BotInfo(10, 10, 10, 10, location, 10, Direction.North )};
+			var expectedInfos = new List<EntityInfo> { new EntityInfo(EntityType.Gem, 10, 10, 10, 10, location, true, true, false, 10), new BotInfo(10, 10, 10, 10, location, 10, Direction.North) };
 
 			foreach (var entity in expectedInfos.Select(CreateEntity))
 				map.Add(entity);

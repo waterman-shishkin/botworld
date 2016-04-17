@@ -24,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,10 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseEntity.cs" />
     <Compile Include="Cell.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="BotInfo.cs" />
-    <Compile Include="EntitiesExtensions.cs" />
     <Compile Include="EntityInfo.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="HumanControlBotIntelligence.cs" />
@@ -56,6 +57,8 @@
     <Compile Include="Bot.cs" />
     <Compile Include="AttackResponseAction.cs" />
     <Compile Include="EntityType.cs" />
+    <Compile Include="EntityEventArgs.cs" />
+    <Compile Include="ICollectable.cs" />
     <Compile Include="IGameScenario.cs" />
     <Compile Include="IGame.cs" />
     <Compile Include="IMap.cs" />

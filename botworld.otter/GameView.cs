@@ -21,7 +21,14 @@ namespace botworld.otter
 
 		public void Start()
 		{
+			otterGame.OnUpdate += OnUpdate;
 			otterGame.Start(mapView.Scene);
+		}
+
+		private void OnUpdate()
+		{
+			if (!game.GameOver)
+				game.Tick();
 		}
 	}
 }
