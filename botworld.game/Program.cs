@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using botworld.bl;
 using botworld.ogmo;
 using botworld.otter;
 
@@ -31,7 +32,8 @@ namespace botworld.game
 					throw new InvalidOperationException("Не найден файл '" + levelFileName + ".oel' с описанием уровня");
 
 				var gameLoader = new GameLoader();
-				var game = gameLoader.Load(projectFilePath, levelFilePath);
+				var keysSequenceSource = new OtterKeysSequenceSource();
+				var game = gameLoader.Load(projectFilePath, levelFilePath, keysSequenceSource);
 				var levelSettings = gameLoader.LevelSettings;
 				var gameView = new GameView("Botworld: " + levelSettings.Title, game, levelSettings.CellSize,
 					levelSettings.BackgroundColor, levelSettings.EntitiesImageFilenames, levelsDirPath);

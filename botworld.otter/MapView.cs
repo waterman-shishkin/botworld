@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using botworld.bl;
 using Otter;
 
@@ -19,7 +20,9 @@ namespace botworld.otter
 		private void InitScene()
 		{
 			Scene = new Scene();
-			foreach (var entity in map.GetEntities())
+			foreach (var entity in map.GetEntities().Where(e => e.Type != EntityType.Bot))
+				Scene.Add(factory.Create(entity));
+			foreach (var entity in map.GetBots())
 				Scene.Add(factory.Create(entity));
 		}
 

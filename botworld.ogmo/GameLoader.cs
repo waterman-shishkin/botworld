@@ -10,11 +10,11 @@ namespace botworld.ogmo
 
 		public LevelSettings LevelSettings { get; private set; }
 
-		public IGame Load(string projectFilePath, string levelFilePath)
+		public IGame Load(string projectFilePath, string levelFilePath, IKeysSequenceSource keysSequenceSource)
 		{
 			var projectDocument = XDocument.Load(projectFilePath);
 			var levelDocument = XDocument.Load(levelFilePath);
-			LevelSettings = settingsBuilder.ForProject(projectDocument).ForLevel(levelDocument).Build();
+			LevelSettings = settingsBuilder.ForProject(projectDocument).ForLevel(levelDocument).ForPlayerInput(keysSequenceSource).Build();
 			var game = gameBuilder.Build(LevelSettings);
 			return game;
 		}

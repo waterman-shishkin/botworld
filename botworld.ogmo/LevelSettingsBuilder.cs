@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using botworld.bl;
 using Newtonsoft.Json.Linq;
 
 namespace botworld.ogmo
@@ -11,6 +12,7 @@ namespace botworld.ogmo
 	{
 		private XDocument project;
 		private XDocument level;
+		private IKeysSequenceSource keysSequenceSource;
 
 		public LevelSettingsBuilder ForProject(XDocument projectDocument)
 		{
@@ -21,6 +23,12 @@ namespace botworld.ogmo
 		public LevelSettingsBuilder ForLevel(XDocument levelDocument)
 		{
 			level = levelDocument;
+			return this;
+		}
+
+		public LevelSettingsBuilder ForPlayerInput(IKeysSequenceSource keysSequenceSource)
+		{
+			this.keysSequenceSource = keysSequenceSource;
 			return this;
 		}
 
@@ -54,7 +62,7 @@ namespace botworld.ogmo
 			var scenario = new GameScenariosFactory().Create(scenarioJson);
 
 			entitiesElements = level.XPathSelectElements(@"level/Entities/*");
-			var entitiesFactory = new EntitiesFactory(cellWidth);
+			var entitiesFactory = new EntitiesFactory(cellWidth, keysSequenceSource);
 			var entities = entitiesElements.Select(entitiesFactory.Create);
 
 			return new LevelSettings(title, width, height, cellWidth, backgroundColor, imageFilenames, scenario, entities);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using botworld.bl;
+using Otter;
 using Color = System.Drawing.Color;
 using Game = Otter.Game;
 
@@ -9,7 +10,7 @@ namespace botworld.otter
 	{
 		private readonly IGame game;
 		private readonly Game otterGame;
-		private MapView mapView;
+		private readonly MapView mapView;
 
 		public GameView(string title, IGame game, int cellSize, Color backgroundColor, IReadOnlyDictionary<string, string> entitiesImageFilenames, string levelsDirPath)
 		{
@@ -27,8 +28,23 @@ namespace botworld.otter
 
 		private void OnUpdate()
 		{
-			if (!game.GameOver)
-				game.Tick();
+			if (game.GameOver || !game.Tick()) 
+				return;
+
+			ShowGameOver();
+		}
+
+		private void ShowGameOver()
+		{
+			var entity = new Entity(otterGame.HalfWidth, otterGame.HalfHeight);
+			var text = new Text("Game over!", 60);
+			text.TextStyle = TextStyle.Bold;
+			text.ShadowColor = Otter.Color.Red;
+			text.ShadowX = 1;
+			text.ShadowY = 3;
+			text.CenterOrigin();
+			entity.AddGraphic(text);
+			mapView.Scene.Add(entity);
 		}
 	}
 }

@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OtterKeysSequenceSource.cs" />
     <Compile Include="WallView.cs" />
     <Compile Include="GemView.cs" />
     <Compile Include="MineView.cs" />
